@@ -1,11 +1,49 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import KpiCards from "@/components/dashboard/KpiCards";
+import RevenueChart from "@/components/dashboard/RevenueChart";
+import ProfitabilityChart from "@/components/dashboard/ProfitabilityChart";
+import GuidanceSection from "@/components/dashboard/GuidanceSection";
+import SummarySection from "@/components/dashboard/SummarySection";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        {/* Header */}
+        <header className="space-y-1">
+          <div className="flex items-baseline gap-3">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Figma
+            </h1>
+            <span className="text-sm font-medium text-muted-foreground">(NYSE: FIG)</span>
+          </div>
+          <p className="text-sm text-muted-foreground">Q4 2025 Earnings Dashboard</p>
+        </header>
+
+        {/* KPI Cards */}
+        <KpiCards />
+
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <RevenueChart />
+          <ProfitabilityChart />
+        </div>
+
+        {/* Guidance */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Forward Guidance</h2>
+          <GuidanceSection />
+        </div>
+
+        {/* Summary */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Analyst Brief</h2>
+          <SummarySection />
+        </div>
+
+        {/* Footer */}
+        <footer className="border-t border-border/50 pt-4 text-center text-xs text-muted-foreground">
+          Data sourced from Figma Q4 2025 earnings release. Estimates are consensus analyst projections.
+        </footer>
       </div>
     </div>
   );
