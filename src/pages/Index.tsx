@@ -3,6 +3,8 @@ import RevenueChart from "@/components/dashboard/RevenueChart";
 import ProfitabilityChart from "@/components/dashboard/ProfitabilityChart";
 import GuidanceSection from "@/components/dashboard/GuidanceSection";
 import AnalystSection from "@/components/dashboard/AnalystSection";
+import KeyMetrics from "@/components/dashboard/KeyMetrics";
+import StrategicInsights from "@/components/dashboard/StrategicInsights";
 import VerdictSection from "@/components/dashboard/VerdictSection";
 import SummarySection from "@/components/dashboard/SummarySection";
 
@@ -36,10 +38,22 @@ const Index = () => {
           <GuidanceSection />
         </div>
 
+        {/* Key Metrics */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">🚀 Metrics That Jump Off the Page</h2>
+          <KeyMetrics />
+        </div>
+
         {/* Analyst Views & Retention */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">Customer Retention & Analyst Views</h2>
           <AnalystSection />
+        </div>
+
+        {/* Strategic Insights */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">🌎 Strategic Insights</h2>
+          <StrategicInsights />
         </div>
 
         {/* Big Picture & Verdict */}
