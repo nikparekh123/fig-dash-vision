@@ -2,6 +2,8 @@ import KpiCards from "@/components/dashboard/KpiCards";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import ProfitabilityChart from "@/components/dashboard/ProfitabilityChart";
 import GuidanceSection from "@/components/dashboard/GuidanceSection";
+import AnalystSection from "@/components/dashboard/AnalystSection";
+import VerdictSection from "@/components/dashboard/VerdictSection";
 import SummarySection from "@/components/dashboard/SummarySection";
 
 const Index = () => {
@@ -32,6 +34,18 @@ const Index = () => {
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">Forward Guidance</h2>
           <GuidanceSection />
+        </div>
+
+        {/* Analyst Views & Retention */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Customer Retention & Analyst Views</h2>
+          <AnalystSection />
+        </div>
+
+        {/* Big Picture & Verdict */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">The Big Picture</h2>
+          <VerdictSection />
         </div>
 
         {/* Summary */}
