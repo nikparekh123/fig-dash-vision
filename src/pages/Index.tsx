@@ -1,4 +1,5 @@
 import KpiCards from "@/components/dashboard/KpiCards";
+import NewsSection from "@/components/dashboard/NewsSection";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import ProfitabilityChart from "@/components/dashboard/ProfitabilityChart";
 import GuidanceSection from "@/components/dashboard/GuidanceSection";
@@ -25,6 +26,12 @@ const Index = () => {
 
         {/* KPI Cards */}
         <KpiCards />
+
+        {/* Latest News */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Latest News</h2>
+          <NewsSection />
+        </div>
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
