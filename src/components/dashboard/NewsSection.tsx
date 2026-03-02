@@ -1,12 +1,19 @@
 import { Newspaper } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface NewsItem {
   headline: string;
   source: string;
+  tag?: string;
 }
 
 const newsItems: NewsItem[] = [
+  {
+    headline: "Figma to offer optional AI credit subscriptions for admins starting March 11, 2026",
+    source: "Figma",
+    tag: "New",
+  },
   {
     headline: "Piper Sandler reiterates Figma stock rating on strong guidance",
     source: "Piper Sandler",
@@ -32,7 +39,14 @@ const NewsSection = () => (
             <p className="text-sm font-medium leading-snug text-foreground">
               {item.headline}
             </p>
-            <p className="text-xs text-muted-foreground">{item.source}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-muted-foreground">{item.source}</p>
+              {item.tag && (
+                <Badge className="border-success/30 bg-success/10 text-success text-[10px] px-1.5 py-0 leading-4 hover:bg-success/20">
+                  {item.tag}
+                </Badge>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
