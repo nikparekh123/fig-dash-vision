@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Users, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 const analysts = [
@@ -27,6 +28,9 @@ const AnalystSection = () => (
         <div className="flex items-center gap-2">
           <Users className="h-4 w-4 text-success" />
           <CardTitle className="text-sm font-semibold text-foreground">Net Dollar Retention</CardTitle>
+          <Badge className="border-chart-amber/30 bg-chart-amber/10 text-chart-amber text-[10px] px-1.5 py-0 leading-4 hover:bg-chart-amber/20">
+            Monitor
+          </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
