@@ -10,6 +10,7 @@ import KeyMetrics from "@/components/dashboard/KeyMetrics";
 import StrategicInsights from "@/components/dashboard/StrategicInsights";
 import VerdictSection from "@/components/dashboard/VerdictSection";
 import SummarySection from "@/components/dashboard/SummarySection";
+import TechnicalAnalysisSection from "@/components/dashboard/TechnicalAnalysisSection";
 
 const Index = () => {
   return (
@@ -50,6 +51,12 @@ const Index = () => {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <RevenueChart />
           <ProfitabilityChart />
+        </div>
+
+        {/* Technical Analysis */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">📈 Technical Analysis</h2>
+          <TechnicalAnalysisSection />
         </div>
 
         {/* Guidance */}
