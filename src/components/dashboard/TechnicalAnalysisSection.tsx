@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { PieChart, Pie, Cell } from "recharts";
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { PieChart, Pie, Cell, Customized } from "recharts";
+import { TrendingUp, TrendingDown, Maximize2 } from "lucide-react";
 import tradingviewChart from "@/assets/tradingview-chart.png";
-
 const CURRENT_PRICE = 30.49;
 
 const emaData = [
@@ -57,93 +58,123 @@ const RsiNeedle = ({ cx, cy, outerRadius, value }: { cx: number; cy: number; out
 };
 
 const TechnicalAnalysisSection = () => {
+  const [chartOpen, setChartOpen] = useState(false);
   const cx = 140;
   const cy = 120;
   const innerRadius = 60;
   const outerRadius = 100;
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      {/* EMA Card */}
-      <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
-        <CardContent className="p-5">
-          <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Exponential Moving Averages
-          </p>
-          <p className="mb-4 text-muted-foreground">
-            Current Price: <span className="text-2xl font-bold text-foreground">${CURRENT_PRICE}</span>
-          </p>
-          <div className="mb-4 overflow-hidden rounded-lg border border-border/50">
-            <img src={tradingviewChart} alt="TradingView chart with EMA overlays" className="w-full" />
-          </div>
-          <div className="space-y-3">
-            {emaData.map((ema) => {
-              const isAbove = CURRENT_PRICE > ema.value;
-              return (
-                <div
-                  key={ema.label}
-                  className="flex items-center justify-between rounded-lg border border-border/50 bg-background/50 px-4 py-3"
-                >
-                  <div className="space-y-0.5">
-                    <p className="text-sm font-medium text-foreground">{ema.label}</p>
-                    <div className="flex items-center gap-1.5">
-                      {isAbove ? (
-                        <TrendingUp className="h-3.5 w-3.5 text-success" />
-                      ) : (
-                        <TrendingDown className="h-3.5 w-3.5 text-danger" />
-                      )}
-                      <span className={`text-xs font-medium ${isAbove ? "text-success" : "text-danger"}`}>
-                        Price {isAbove ? "above" : "below"} EMA
-                      </span>
+    <>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {/* EMA Card */}
+        <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+          <CardContent className="p-5">
+            <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Exponential Moving Averages
+            </p>
+            <p className="mb-4 text-muted-foreground">
+              Current Price: <span className="text-2xl font-bold text-foreground">${CURRENT_PRICE}</span>
+            </p>
+            <div className="space-y-3">
+              {emaData.map((ema) => {
+                const isAbove = CURRENT_PRICE > ema.value;
+                return (
+                  <div
+                    key={ema.label}
+                    className="flex items-center justify-between rounded-lg border border-border/50 bg-background/50 px-4 py-3"
+                  >
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium text-foreground">{ema.label}</p>
+                      <div className="flex items-center gap-1.5">
+                        {isAbove ? (
+                          <TrendingUp className="h-3.5 w-3.5 text-success" />
+                        ) : (
+                          <TrendingDown className="h-3.5 w-3.5 text-danger" />
+                        )}
+                        <span className={`text-xs font-medium ${isAbove ? "text-success" : "text-danger"}`}>
+                          Price {isAbove ? "above" : "below"} EMA
+                        </span>
+                      </div>
                     </div>
+                    <p className="text-xl font-bold tabular-nums text-foreground">${ema.value.toFixed(2)}</p>
                   </div>
-                  <p className="text-xl font-bold tabular-nums text-foreground">${ema.value.toFixed(2)}</p>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* RSI Gauge Card */}
-      <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
-        <CardContent className="p-5">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Relative Strength Index (RSI)
-          </p>
-          <div className="flex flex-col items-center">
-            <PieChart width={280} height={160}>
-              <Pie
-                data={gaugeData}
-                cx={cx}
-                cy={cy}
-                startAngle={180}
-                endAngle={0}
-                innerRadius={innerRadius}
-                outerRadius={outerRadius}
-                dataKey="value"
-                stroke="none"
-              >
-                {gaugeData.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <RsiNeedle cx={cx} cy={cy} outerRadius={outerRadius} value={RSI_VALUE} />
-            </PieChart>
-            <div className="-mt-8 text-center">
-              <p className="text-3xl font-bold tabular-nums text-foreground">{RSI_VALUE}</p>
-              <p className="text-sm font-medium text-muted-foreground">
-                {RSI_VALUE < 30 ? "Oversold" : RSI_VALUE > 70 ? "Overbought" : "Neutral"}
+        {/* Chart Card - Clickable */}
+        <Card
+          className="group cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm transition-all hover:border-primary/30"
+          onClick={() => setChartOpen(true)}
+        >
+          <CardContent className="relative p-5">
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Price Chart
               </p>
+              <Maximize2 className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
             </div>
-            <div className="mt-3 flex w-full justify-between px-4 text-xs text-muted-foreground">
-              <span className="text-[hsl(0,72%,51%)]">Oversold (&lt;30)</span>
-              <span className="text-[hsl(142,71%,45%)]">Overbought (&gt;70)</span>
+            <div className="overflow-hidden rounded-lg border border-border/50">
+              <img src={tradingviewChart} alt="TradingView chart with EMA overlays" className="w-full" />
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+
+        {/* RSI Gauge Card */}
+        <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+          <CardContent className="p-5">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Relative Strength Index (RSI)
+            </p>
+            <div className="flex flex-col items-center">
+              <PieChart width={280} height={160}>
+                <Pie
+                  data={gaugeData}
+                  cx={cx}
+                  cy={cy}
+                  startAngle={180}
+                  endAngle={0}
+                  innerRadius={innerRadius}
+                  outerRadius={outerRadius}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {gaugeData.map((entry, index) => (
+                    <Cell key={index} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Customized
+                  component={() => (
+                    <RsiNeedle cx={cx} cy={cy} outerRadius={outerRadius} value={RSI_VALUE} />
+                  )}
+                />
+              </PieChart>
+              <div className="-mt-8 text-center">
+                <p className="text-3xl font-bold tabular-nums text-foreground">{RSI_VALUE}</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  {RSI_VALUE < 30 ? "Oversold" : RSI_VALUE > 70 ? "Overbought" : "Neutral"}
+                </p>
+              </div>
+              <div className="mt-3 flex w-full justify-between px-4 text-xs text-muted-foreground">
+                <span className="text-[hsl(0,72%,51%)]">Oversold (&lt;30)</span>
+                <span className="text-[hsl(142,71%,45%)]">Overbought (&gt;70)</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Maximized Chart Dialog */}
+      <Dialog open={chartOpen} onOpenChange={setChartOpen}>
+        <DialogContent className="max-w-5xl border-border/50 bg-card p-2">
+          <DialogTitle className="sr-only">Price Chart</DialogTitle>
+          <img src={tradingviewChart} alt="TradingView chart with EMA overlays" className="w-full rounded-lg" />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
