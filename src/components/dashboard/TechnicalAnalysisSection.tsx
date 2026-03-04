@@ -1,12 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import tradingviewChart from "@/assets/tradingview-chart.png";
 
 const CURRENT_PRICE = 30.49;
 
 const emaData = [
-  { label: "50 EMA", value: 30.35, signal: 30.35 < CURRENT_PRICE ? "above" : "below" },
-  { label: "100 EMA", value: 38.95, signal: 38.95 < CURRENT_PRICE ? "above" : "below" },
+  { label: "50 EMA", value: 30.35 },
+  { label: "100 EMA", value: 38.95 },
 ];
 
 const RSI_VALUE = 58.58;
@@ -24,19 +25,33 @@ const RsiNeedle = ({ cx, cy, outerRadius, value }: { cx: number; cy: number; out
   const needleLength = outerRadius * 0.75;
   const x = cx + needleLength * Math.cos(-angle * RADIAN);
   const y = cy + needleLength * Math.sin(-angle * RADIAN);
+  const labelX = cx + (outerRadius + 14) * Math.cos(-angle * RADIAN);
+  const labelY = cy + (outerRadius + 14) * Math.sin(-angle * RADIAN);
 
   return (
     <g>
-      <circle cx={cx} cy={cy} r={5} fill="hsl(var(--foreground))" />
+      <circle cx={cx} cy={cy} r={6} fill="white" stroke="white" strokeWidth={1} />
       <line
         x1={cx}
         y1={cy}
         x2={x}
         y2={y}
-        stroke="hsl(var(--foreground))"
-        strokeWidth={2.5}
+        stroke="white"
+        strokeWidth={3}
         strokeLinecap="round"
       />
+      <circle cx={x} cy={y} r={3} fill="white" />
+      <text
+        x={labelX}
+        y={labelY}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="white"
+        fontSize={11}
+        fontWeight={700}
+      >
+        {value}
+      </text>
     </g>
   );
 };
@@ -55,9 +70,12 @@ const TechnicalAnalysisSection = () => {
           <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Exponential Moving Averages
           </p>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Current Price: <span className="font-semibold text-foreground">${CURRENT_PRICE}</span>
+          <p className="mb-4 text-muted-foreground">
+            Current Price: <span className="text-2xl font-bold text-foreground">${CURRENT_PRICE}</span>
           </p>
+          <div className="mb-4 overflow-hidden rounded-lg border border-border/50">
+            <img src={tradingviewChart} alt="TradingView chart with EMA overlays" className="w-full" />
+          </div>
           <div className="space-y-3">
             {emaData.map((ema) => {
               const isAbove = CURRENT_PRICE > ema.value;
@@ -110,7 +128,6 @@ const TechnicalAnalysisSection = () => {
                   <Cell key={index} fill={entry.color} />
                 ))}
               </Pie>
-              {/* Needle */}
               <RsiNeedle cx={cx} cy={cy} outerRadius={outerRadius} value={RSI_VALUE} />
             </PieChart>
             <div className="-mt-8 text-center">
