@@ -1,3 +1,4 @@
+import { Figma, Clock } from "lucide-react";
 import KpiCards from "@/components/dashboard/KpiCards";
 import NewsSection from "@/components/dashboard/NewsSection";
 import RevenueChart from "@/components/dashboard/RevenueChart";
@@ -14,14 +15,25 @@ const Index = () => {
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
         {/* Header */}
-        <header className="space-y-1">
-          <div className="flex items-baseline gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-              Figma
-            </h1>
-            <span className="text-sm font-medium text-muted-foreground">(NYSE: FIG)</span>
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
+              <Figma className="h-5 w-5 text-foreground" />
+            </div>
+            <div className="space-y-0.5">
+              <div className="flex items-baseline gap-2">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+                  Figma
+                </h1>
+                <span className="text-sm font-medium text-muted-foreground">(NYSE: FIG)</span>
+              </div>
+              <p className="text-sm text-muted-foreground">Q4 2025 Earnings Dashboard</p>
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground">Q4 2025 Earnings Dashboard</p>
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Clock className="h-3.5 w-3.5" />
+            <span>Last updated: March 4, 2026</span>
+          </div>
         </header>
 
         {/* KPI Cards */}
