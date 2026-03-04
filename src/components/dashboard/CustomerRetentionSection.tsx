@@ -11,6 +11,8 @@ import {
   ResponsiveContainer,
   LabelList,
   Cell,
+  PieChart,
+  Pie,
 } from "recharts";
 
 const ndrData = {
@@ -109,17 +111,83 @@ const TierChart = ({
   </Card>
 );
 
-const RegionalTooltip = ({ active, payload, label }: any) => {
+const PieTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
+  const data = payload[0];
   return (
     <div className="rounded-lg border border-border/50 bg-card px-3 py-2 text-xs shadow-xl">
-      <p className="font-semibold text-foreground">{label}</p>
-      {payload.map((p: any, i: number) => (
-        <p key={i} style={{ color: p.fill }} className="text-muted-foreground">
-          {p.name}: <span className="font-mono text-foreground">${p.value}M</span>
-        </p>
-      ))}
+      <p className="font-semibold text-foreground">{data.name}</p>
+      <p className="text-muted-foreground">
+        Revenue: <span className="font-mono text-foreground">${data.value}M</span>
+      </p>
+      <p className="text-muted-foreground">
+        Share: <span className="font-mono text-foreground">{data.percent.toFixed(1)}%</span>
+      </p>
     </div>
+  );
+};
+
+const RegionalRetentionSection = () => {
+  const pieData = [
+    { name: "United States", value: 491.5, fill: "hsl(var(--chart-blue))" },
+    { name: "International", value: 564.2, fill: "hsl(var(--success))" },
+  ];
+
+  const totalRevenue = pieData.reduce((sum, item) => sum + item.value, 0);
+
+  return (
+    <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+      <CardHeader className="pb-2">
+        <div className="flex items-center gap-2">
+          <Globe className="h-4 w-4 text-chart-blue" />
+          <CardTitle className="text-sm font-semibold text-foreground">Regional Revenue</CardTitle>
+        </div>
+        <p className="text-xs text-muted-foreground">2025 Distribution ($M)</p>
+      </CardHeader>
+      <CardContent>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+              <Tooltip content={<PieTooltip />} />
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value"
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.fill} fillOpacity={0.85} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-4 space-y-2 text-xs">
+          <div className="flex justify-between">
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-chart-blue/85" />
+              United States
+            </span>
+            <span className="font-mono font-semibold text-foreground">$491.5M</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-success/85" />
+              International
+            </span>
+            <span className="font-mono font-semibold text-foreground">$564.2M</span>
+          </div>
+          <div className="border-t border-border/30 pt-2 flex justify-between font-semibold">
+            <span className="text-foreground">Total</span>
+            <span className="font-mono text-foreground">${totalRevenue.toFixed(1)}M</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -143,46 +211,7 @@ const CustomerRetentionSection = () => (
         </CardContent>
       </Card>
 
-      {/* Regional Performance */}
-      <Card className="border-border/50 bg-card/80 backdrop-blur-sm lg:col-span-2">
-        <CardHeader className="pb-2">
-          <div className="flex items-center gap-2">
-            <Globe className="h-4 w-4 text-chart-blue" />
-            <CardTitle className="text-sm font-semibold text-foreground">Regional Revenue</CardTitle>
-          </div>
-          <p className="text-xs text-muted-foreground">US vs International ($M)</p>
-        </CardHeader>
-        <CardContent>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={regionalData} margin={{ top: 16, right: 8, left: 8, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" vertical={false} />
-                <XAxis
-                  dataKey="region"
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                  axisLine={{ stroke: "hsl(var(--muted))" }}
-                  tickLine={false}
-                />
-                <YAxis
-                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                  axisLine={false}
-                  tickLine={false}
-                  tickFormatter={(v) => `$${v}M`}
-                />
-                <Tooltip content={<RegionalTooltip />} cursor={{ fill: "hsl(var(--muted) / 0.4)" }} />
-                <Bar dataKey="y2023" name="2023" fill="hsl(var(--chart-amber))" fillOpacity={0.7} radius={[4, 4, 0, 0]} maxBarSize={28} />
-                <Bar dataKey="y2024" name="2024" fill="hsl(var(--chart-blue))" fillOpacity={0.8} radius={[4, 4, 0, 0]} maxBarSize={28} />
-                <Bar dataKey="y2025" name="2025" fill="hsl(var(--success))" fillOpacity={0.85} radius={[4, 4, 0, 0]} maxBarSize={28} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-2 flex items-center justify-center gap-4 text-[10px] text-muted-foreground">
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-chart-amber/70" />2023</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-chart-blue/80" />2024</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-success/85" />2025</span>
-          </div>
-        </CardContent>
-      </Card>
+      <RegionalRetentionSection />
     </div>
 
     {/* Customer Tier Charts */}
