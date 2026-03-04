@@ -5,6 +5,7 @@ import RevenueChart from "@/components/dashboard/RevenueChart";
 import ProfitabilityChart from "@/components/dashboard/ProfitabilityChart";
 import GuidanceSection from "@/components/dashboard/GuidanceSection";
 import AnalystSection from "@/components/dashboard/AnalystSection";
+import CustomerRetentionSection from "@/components/dashboard/CustomerRetentionSection";
 import KeyMetrics from "@/components/dashboard/KeyMetrics";
 import StrategicInsights from "@/components/dashboard/StrategicInsights";
 import VerdictSection from "@/components/dashboard/VerdictSection";
@@ -63,9 +64,15 @@ const Index = () => {
           <KeyMetrics />
         </div>
 
-        {/* Analyst Views & Retention */}
+        {/* Customer Retention */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">Customer Retention & Analyst Views</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Customer Retention & Growth</h2>
+          <CustomerRetentionSection />
+        </div>
+
+        {/* Analyst Views */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Analyst Views</h2>
           <AnalystSection />
         </div>
 
