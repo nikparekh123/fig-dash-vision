@@ -114,6 +114,7 @@ const TierChart = ({
 const PieTooltip = ({ active, payload }: any) => {
   if (!active || !payload?.length) return null;
   const data = payload[0];
+  const percent = typeof data?.percent === "number" ? (data.percent * 100).toFixed(1) : "N/A";
   return (
     <div className="rounded-lg border border-border/50 bg-card px-3 py-2 text-xs shadow-xl">
       <p className="font-semibold text-foreground">{data.name}</p>
@@ -121,7 +122,7 @@ const PieTooltip = ({ active, payload }: any) => {
         Revenue: <span className="font-mono text-foreground">${data.value}M</span>
       </p>
       <p className="text-muted-foreground">
-        Share: <span className="font-mono text-foreground">{data.percent.toFixed(1)}%</span>
+        Share: <span className="font-mono text-foreground">{percent}%</span>
       </p>
     </div>
   );
