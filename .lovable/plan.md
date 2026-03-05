@@ -1,18 +1,23 @@
 
 
-## Changes to `src/components/dashboard/TechnicalAnalysisSection.tsx`
+## Plan: Add Billings alongside Revenue in the same chart
 
-### 1. Fix RSI Needle Visibility
-The `RsiNeedle` component is rendered as a direct child of `PieChart`, but Recharts ignores arbitrary children. Fix by wrapping it with Recharts' `Customized` component which allows rendering custom SVG elements inside the chart.
+### Changes to `RevenueChart.tsx`
 
-### 2. Chart Image as Clickable Expandable Widget
-- Extract the TradingView chart image into its own Card within the technical analysis section grid
-- Add click-to-maximize functionality using a Dialog (modal) — clicking the chart opens a full-screen overlay showing the chart at maximum size
-- Keep it in the same technical analysis section, making the grid 3 columns on large screens (EMA metrics, Chart, RSI gauge) or stack appropriately
+**Data update** — Add `billings` field to the yearly data and include FY2023/FY2024 history from the 10-K:
+- FY2023: Revenue $505M, Billings ~$600M (estimated from growth)
+- FY2024: Revenue $749M, Billings $877M
+- FY2025: Revenue $1,056M, Billings $1,270M
+- FY2026E: Revenue $1,370M (keep estimate only for revenue)
 
-### Layout
-The section becomes a 3-column grid on large screens:
-1. EMA metrics card (without the chart image)
-2. TradingView chart card (clickable, opens in Dialog)
-3. RSI gauge card (with fixed needle)
+**Chart update** — Render two grouped `<Bar>` elements side by side:
+- Green bar = Revenue
+- Blue bar = Billings
+- Add a `<Legend>` to label both series
+
+**Tooltip update** — Show both Revenue and Billings values in the custom tooltip.
+
+**Title update** — Change to "Revenue & Billings Overview".
+
+Quarterly view stays revenue-only since quarterly billings data isn't available from the 10-K.
 
