@@ -95,15 +95,15 @@ const Index = () => {
           <VerdictSection />
         </div>
 
-        {/* Summary */}
+        {/* Investment Thesis */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">Analyst Brief</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Investment Thesis</h2>
           <SummarySection />
         </div>
 
         {/* Footer */}
         <footer className="border-t border-border/50 pt-4 text-center text-xs text-muted-foreground">
-          Data sourced from Figma Q4 2025 earnings release. Estimates are consensus analyst projections.
+          Data sourced from Figma Form 10-K, Year Ended December 31, 2025. Not investment advice.
         </footer>
       </div>
     </div>

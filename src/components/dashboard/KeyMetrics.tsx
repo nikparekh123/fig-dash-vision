@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
   Percent,
@@ -7,6 +7,8 @@ import {
   Landmark,
   Layers,
   TrendingUp,
+  Clock,
+  BarChart3,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -19,17 +21,18 @@ const metrics: {
   monitor?: boolean;
 }[] = [
   {
-    icon: <Percent className="h-4 w-4 text-success" />,
-    label: "Gross Margin",
-    value: "90%",
-    sub: "Q2 2025 — near best-in-class SaaS",
-    accent: "success" as const,
+    icon: <Percent className="h-4 w-4 text-chart-amber" />,
+    label: "Gross Margin (GAAP)",
+    value: "82.4%",
+    sub: "FY2025 — down from 88.3% in FY2024. AI inference costs compressing margins.",
+    accent: "amber" as const,
+    monitor: true,
   },
   {
     icon: <TrendingUp className="h-4 w-4 text-success" />,
     label: "Net Dollar Retention",
-    value: "129%",
-    sub: "Existing customers expanding spend rapidly",
+    value: "136%",
+    sub: "Customers with >$10K ARR expanding spend rapidly",
     accent: "success" as const,
     monitor: true,
   },
@@ -43,15 +46,15 @@ const metrics: {
   {
     icon: <Banknote className="h-4 w-4 text-success" />,
     label: "Free Cash Flow Margin",
-    value: "24%",
-    sub: "Q2 2025 adjusted — cash generation turning positive",
+    value: "23%",
+    sub: "$242.7M FCF — first year of clean generation at scale",
     accent: "success" as const,
   },
   {
     icon: <Landmark className="h-4 w-4 text-chart-blue" />,
     label: "Cash & Securities",
-    value: "$1.6B+",
-    sub: "Ample runway for growth and R&D",
+    value: "$1.66B",
+    sub: "Zero debt. Includes $73.7M Bitcoin ETF. Ample runway.",
     accent: "blue" as const,
   },
   {
@@ -60,6 +63,20 @@ const metrics: {
     value: "80%",
     sub: "Use 2+ products; 66% use 3+",
     accent: "amber" as const,
+  },
+  {
+    icon: <Clock className="h-4 w-4 text-chart-amber" />,
+    label: "Deferred Revenue",
+    value: "$595M",
+    sub: "Up from $381M — contractually committed future revenue already billed",
+    accent: "amber" as const,
+  },
+  {
+    icon: <BarChart3 className="h-4 w-4 text-success" />,
+    label: "Non-GAAP Op. Income",
+    value: "$129.5M",
+    sub: "12% Non-GAAP operating margin in FY2025",
+    accent: "success" as const,
   },
 ];
 
@@ -71,7 +88,7 @@ const accentMap = {
 
 const KeyMetrics = () => (
   <div className="space-y-4">
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {metrics.map((m) => (
         <Card key={m.label} className="border-border/50 bg-card/80 backdrop-blur-sm">
           <CardContent className="p-4">
