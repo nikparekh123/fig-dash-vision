@@ -11,6 +11,7 @@ import StrategicInsights from "@/components/dashboard/StrategicInsights";
 import SummarySection from "@/components/dashboard/SummarySection";
 import TechnicalAnalysisSection from "@/components/dashboard/TechnicalAnalysisSection";
 import MarketPenetration from "@/components/dashboard/MarketPenetration";
+import OwnershipStructure from "@/components/dashboard/OwnershipStructure";
 
 const Index = () => {
   return (
@@ -63,6 +64,12 @@ const Index = () => {
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">🎯 Market Penetration & Growth Runway</h2>
           <MarketPenetration />
+        </div>
+
+        {/* 6. Ownership Structure */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">🏛 Ownership Structure</h2>
+          <OwnershipStructure />
         </div>
 
         {/* 6. Customer Retention & Growth */}
