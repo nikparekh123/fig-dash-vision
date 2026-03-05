@@ -9,13 +9,15 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
+  Legend,
   LabelList,
 } from "recharts";
 
 const yearlyData = [
-  { name: "FY2025", revenue: 1060, growth: "+41%", type: "actual" },
-  { name: "FY2026E", revenue: 1370, growth: "+29%", type: "estimate" },
+  { name: "FY2023", revenue: 505, billings: 600, revenueGrowth: "+48%", billingsGrowth: "~est.", type: "actual" },
+  { name: "FY2024", revenue: 749, billings: 877, revenueGrowth: "+48%", billingsGrowth: "+46%", type: "actual" },
+  { name: "FY2025", revenue: 1056, billings: 1270, revenueGrowth: "+41%", billingsGrowth: "+45%", type: "actual" },
+  { name: "FY2026E", revenue: 1370, billings: null, revenueGrowth: "+29%", billingsGrowth: null, type: "estimate" },
 ];
 
 const quarterlyData = [
@@ -25,15 +27,26 @@ const quarterlyData = [
   { name: "Q4 2025", revenue: 303.8, growth: "+40%", type: "actual" },
 ];
 
+const formatValue = (v: number) => v >= 1000 ? `$${(v / 1000).toFixed(2)}B` : `$${v}M`;
+
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
+  const entry = payload[0]?.payload;
   return (
     <div className="rounded-lg border border-border/50 bg-card px-3 py-2 text-xs shadow-xl">
-      <p className="font-semibold text-foreground">{label}</p>
-      <p className="text-muted-foreground">
-        Revenue: <span className="font-mono text-foreground">${payload[0].value >= 1000 ? `${(payload[0].value / 1000).toFixed(2)}B` : `${payload[0].value}M`}</span>
-      </p>
-      <p className="text-success text-[10px]">{payload[0].payload.growth} YoY</p>
+      <p className="font-semibold text-foreground mb-1">{label}</p>
+      {entry.revenue != null && (
+        <p className="text-muted-foreground">
+          Revenue: <span className="font-mono text-foreground">{formatValue(entry.revenue)}</span>
+          <span className="text-success ml-1 text-[10px]">{entry.revenueGrowth || entry.growth}</span>
+        </p>
+      )}
+      {entry.billings != null && (
+        <p className="text-muted-foreground">
+          Billings: <span className="font-mono text-foreground">{formatValue(entry.billings)}</span>
+          <span className="text-[hsl(217,91%,60%)] ml-1 text-[10px]">{entry.billingsGrowth}</span>
+        </p>
+      )}
     </div>
   );
 };
@@ -47,9 +60,9 @@ const RevenueChart = () => {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold text-foreground">Revenue Overview</CardTitle>
+            <CardTitle className="text-base font-semibold text-foreground">Revenue & Billings Overview</CardTitle>
             <p className="text-xs text-muted-foreground">
-              {view === "quarterly" ? "FY2025 quarterly breakdown ($M)" : "Annual & forward guidance ($M)"}
+              {view === "quarterly" ? "FY2025 quarterly breakdown ($M)" : "FY2023–FY2026E revenue & billings ($M)"}
             </p>
           </div>
           <ToggleGroup type="single" value={view} onValueChange={(v) => v && setView(v)} size="sm" variant="outline">
@@ -76,22 +89,31 @@ const RevenueChart = () => {
                 tickFormatter={(v) => (v >= 1000 ? `$${v / 1000}B` : `$${v}M`)}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(217 32.6% 17.5% / 0.4)" }} />
-              <Bar dataKey="revenue" radius={[6, 6, 0, 0]} maxBarSize={64}>
-                {data.map((entry, index) => (
-                  <Cell
-                    key={index}
-                    fill={entry.type === "estimate" ? "hsl(217 91% 60%)" : "hsl(142 76% 46%)"}
-                    fillOpacity={entry.type === "estimate" ? 0.6 : 0.85}
-                  />
-                ))}
+              <Bar dataKey="revenue" name="Revenue" fill="hsl(142 76% 46%)" fillOpacity={0.85} radius={[6, 6, 0, 0]} maxBarSize={48}>
                 <LabelList
-                  dataKey="growth"
+                  dataKey="revenueGrowth"
                   position="top"
                   fill="hsl(142 76% 46%)"
-                  fontSize={11}
+                  fontSize={10}
                   fontWeight={600}
                 />
               </Bar>
+              {view === "yearly" && (
+                <Bar dataKey="billings" name="Billings" fill="hsl(217 91% 60%)" fillOpacity={0.7} radius={[6, 6, 0, 0]} maxBarSize={48}>
+                  <LabelList
+                    dataKey="billingsGrowth"
+                    position="top"
+                    fill="hsl(217 91% 60%)"
+                    fontSize={10}
+                    fontWeight={600}
+                  />
+                </Bar>
+              )}
+              <Legend
+                wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
+                iconType="square"
+                iconSize={10}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
