@@ -22,24 +22,15 @@ const ndrData = {
 };
 
 const tier10kData = [
-  { year: "2023", value: 7.2, type: "actual" },
-  { year: "2024", value: 10.5, type: "actual" },
-  { year: "2025", value: 13.9, type: "actual" },
-  { year: "2026E", value: 16.3, type: "estimate" },
-  { year: "2027E", value: 18.0, type: "estimate" },
+  { year: "2023", value: 7200, type: "actual" },
+  { year: "2024", value: 10500, type: "actual" },
+  { year: "2025", value: 11906, type: "actual" },
 ];
 
 const tier100kData = [
-  { year: "2023", value: 0.6, type: "actual" },
-  { year: "2024", value: 1.0, type: "actual" },
-  { year: "2025", value: 1.4, type: "actual" },
-  { year: "2026E", value: 1.7, type: "estimate" },
-  { year: "2027E", value: 2.0, type: "estimate" },
-];
-
-const regionalData = [
-  { region: "United States", y2023: 252.3, y2024: 359.4, y2025: 491.5 },
-  { region: "International", y2023: 252.6, y2024: 389.6, y2025: 564.2 },
+  { year: "2023", value: 600, type: "actual" },
+  { year: "2024", value: 788, type: "actual" },
+  { year: "2025", value: 1119, type: "actual" },
 ];
 
 const ChartTooltip = ({ active, payload, label }: any) => {
@@ -49,7 +40,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
       <p className="font-semibold text-foreground">{label}</p>
       {payload.map((p: any, i: number) => (
         <p key={i} className="text-muted-foreground">
-          {p.name}: <span className="font-mono text-foreground">{p.value}M</span>
+          {p.name}: <span className="font-mono text-foreground">{p.value.toLocaleString()}</span>
         </p>
       ))}
     </div>
@@ -85,15 +76,15 @@ const TierChart = ({
               tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `${v}M`}
+              tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}K` : `${v}`}
             />
             <Tooltip content={<ChartTooltip />} cursor={{ fill: "hsl(var(--muted) / 0.4)" }} />
             <Bar dataKey="value" name="Customers" radius={[4, 4, 0, 0]} maxBarSize={40}>
               {data.map((entry, i) => (
                 <Cell
                   key={i}
-                  fill={entry.type === "estimate" ? "hsl(var(--chart-blue))" : "hsl(var(--success))"}
-                  fillOpacity={entry.type === "estimate" ? 0.6 : 0.85}
+                  fill="hsl(var(--success))"
+                  fillOpacity={0.85}
                 />
               ))}
               <LabelList
@@ -101,7 +92,7 @@ const TierChart = ({
                 position="top"
                 fill="hsl(var(--foreground))"
                 fontSize={10}
-                formatter={(v: number) => `${v}M`}
+                formatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(1)}K` : `${v}`}
               />
             </Bar>
           </BarChart>
@@ -227,12 +218,12 @@ const CustomerRetentionSection = () => (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       <TierChart
         title="Customers >$10K ARR"
-        subtitle="High-value segment growth (millions)"
+        subtitle="High-value segment growth (customer count)"
         data={tier10kData}
       />
       <TierChart
         title="Customers >$100K ARR"
-        subtitle="Enterprise segment growth (millions)"
+        subtitle="Enterprise segment growth (customer count)"
         data={tier100kData}
       />
     </div>

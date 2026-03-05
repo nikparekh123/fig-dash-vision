@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Quote, Cpu, Users, Layers, ShieldCheck } from "lucide-react";
+import { Quote, Cpu, Target, Layers, ShieldCheck } from "lucide-react";
 
 const insights = [
   {
@@ -8,9 +8,9 @@ const insights = [
     text: "Drives revenue growth but compresses margins — cost of revenue grew 112% vs 41% revenue growth. AI inference costs rising. Simultaneously threatens per-seat model if AI agents replace human collaborators.",
   },
   {
-    icon: <Users className="h-4 w-4 text-chart-blue" />,
-    title: "2/3 of users are non-designers",
-    text: "Validates Figma as a cross-functional platform OS, not just a design tool. Developers, PMs, researchers, and marketers make up the majority of monthly active users.",
+    icon: <Target className="h-4 w-4 text-chart-blue" />,
+    title: "~3% TAM penetration",
+    text: "$33B addressable market with only ~$1B in revenue signals a long runway for growth, especially as collaborative tools like FigJam and new products expand the platform's reach.",
   },
   {
     icon: <Layers className="h-4 w-4 text-danger" />,

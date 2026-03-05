@@ -8,9 +8,9 @@ import AnalystSection from "@/components/dashboard/AnalystSection";
 import CustomerRetentionSection from "@/components/dashboard/CustomerRetentionSection";
 import KeyMetrics from "@/components/dashboard/KeyMetrics";
 import StrategicInsights from "@/components/dashboard/StrategicInsights";
-import VerdictSection from "@/components/dashboard/VerdictSection";
 import SummarySection from "@/components/dashboard/SummarySection";
 import TechnicalAnalysisSection from "@/components/dashboard/TechnicalAnalysisSection";
+import MarketPenetration from "@/components/dashboard/MarketPenetration";
 
 const Index = () => {
   return (
@@ -38,67 +38,67 @@ const Index = () => {
           </div>
         </header>
 
-        {/* KPI Cards */}
+        {/* 1. KPI Cards */}
         <KpiCards />
 
-        {/* Latest News */}
+        {/* 2. Investment Thesis */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">Latest News</h2>
-          <NewsSection />
+          <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Investment Thesis</h2>
+          <SummarySection />
         </div>
 
-        {/* Charts Row */}
+        {/* 3. Revenue & Profitability Charts */}
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <RevenueChart />
           <ProfitabilityChart />
         </div>
 
-        {/* Technical Analysis */}
+        {/* 4. Key Metrics (financial deep dive) */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">📈 Technical Analysis</h2>
-          <TechnicalAnalysisSection />
-        </div>
-
-        {/* Guidance */}
-        <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">Forward Guidance</h2>
-          <GuidanceSection />
-        </div>
-
-        {/* Key Metrics */}
-        <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">🚀 Metrics That Jump Off the Page</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">🚀 Key Financial Metrics</h2>
           <KeyMetrics />
         </div>
 
-        {/* Customer Retention */}
+        {/* 5. Market Penetration & Growth Runway */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">🎯 Market Penetration & Growth Runway</h2>
+          <MarketPenetration />
+        </div>
+
+        {/* 6. Customer Retention & Growth */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Customer Retention & Growth</h2>
           <CustomerRetentionSection />
         </div>
 
-        {/* Analyst Views */}
+        {/* 7. Forward Guidance */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">Analyst Views</h2>
-          <AnalystSection />
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Forward Guidance</h2>
+          <GuidanceSection />
         </div>
 
-        {/* Strategic Insights */}
+        {/* 8. Technical Analysis */}
+        <div>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">📈 Technical Analysis</h2>
+          <TechnicalAnalysisSection />
+        </div>
+
+        {/* 9. Strategic Insights */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">🌎 Strategic Insights</h2>
           <StrategicInsights />
         </div>
 
-        {/* Big Picture & Verdict */}
+        {/* 10. Analyst Views */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">The Big Picture</h2>
-          <VerdictSection />
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Analyst Views</h2>
+          <AnalystSection />
         </div>
 
-        {/* Investment Thesis */}
+        {/* 11. Latest News */}
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Investment Thesis</h2>
-          <SummarySection />
+          <h2 className="mb-4 text-lg font-semibold text-foreground">Latest News</h2>
+          <NewsSection />
         </div>
 
         {/* Footer */}
