@@ -3,6 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const shareholders = [
   { name: "Index Ventures", shares: 61_737_449, marketValue: 1_829_897_988, pct: 13.996, type: "Venture Capital", filed: "2025-09-30" },
@@ -52,6 +55,7 @@ const CustomTooltip = ({ active, payload, metric }: any) => {
 
 const OwnershipStructure = () => {
   const [metric, setMetric] = useState<Metric>("pct");
+  const [tableOpen, setTableOpen] = useState(false);
 
   const topOwners = shareholders.reduce((acc, s) => acc + s.pct, 0);
 
@@ -141,39 +145,49 @@ const OwnershipStructure = () => {
         </CardContent>
       </Card>
 
-      {/* Full table */}
-      <Card className="border-border/50 bg-card">
-        <CardContent className="p-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Shareholder</TableHead>
-                <TableHead className="text-right">Shares</TableHead>
-                <TableHead className="text-right">Market Value</TableHead>
-                <TableHead className="text-right">% Outstanding</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Filing Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {shareholders.map((s) => (
-                <TableRow key={s.name}>
-                  <TableCell className="font-medium">{s.name}</TableCell>
-                  <TableCell className="text-right">{s.shares.toLocaleString()}</TableCell>
-                  <TableCell className="text-right">${(s.marketValue / 1e6).toFixed(1)}M</TableCell>
-                  <TableCell className="text-right">{s.pct.toFixed(2)}%</TableCell>
-                  <TableCell>
-                    <span className="rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
-                      {s.type}
-                    </span>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{s.filed}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      {/* Full table - collapsible */}
+      <Collapsible open={tableOpen} onOpenChange={setTableOpen}>
+        <CollapsibleTrigger asChild>
+          <Button variant="ghost" className="flex w-full items-center justify-between px-4 py-2 text-sm text-muted-foreground hover:text-foreground">
+            <span>{tableOpen ? "Hide Full Table" : "View Full Table"}</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${tableOpen ? "rotate-180" : ""}`} />
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <Card className="border-border/50 bg-card">
+            <CardContent className="p-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Shareholder</TableHead>
+                    <TableHead className="text-right">Shares</TableHead>
+                    <TableHead className="text-right">Market Value</TableHead>
+                    <TableHead className="text-right">% Outstanding</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Filing Date</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {shareholders.map((s) => (
+                    <TableRow key={s.name}>
+                      <TableCell className="font-medium">{s.name}</TableCell>
+                      <TableCell className="text-right">{s.shares.toLocaleString()}</TableCell>
+                      <TableCell className="text-right">${(s.marketValue / 1e6).toFixed(1)}M</TableCell>
+                      <TableCell className="text-right">{s.pct.toFixed(2)}%</TableCell>
+                      <TableCell>
+                        <span className="rounded-full bg-accent px-2 py-0.5 text-xs text-accent-foreground">
+                          {s.type}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">{s.filed}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 };
