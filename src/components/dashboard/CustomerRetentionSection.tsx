@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Users, TrendingUp, Globe, DollarSign } from "lucide-react";
+import { Users, TrendingUp, Globe, AlertTriangle } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -213,6 +213,14 @@ const CustomerRetentionSection = () => (
       </Card>
 
       <RegionalRetentionSection />
+    </div>
+
+    {/* NDR Methodology Warning */}
+    <div className="flex items-start gap-2 rounded-lg border border-chart-amber/20 bg-chart-amber/5 p-3">
+      <AlertTriangle className="h-4 w-4 shrink-0 text-chart-amber mt-0.5" />
+      <p className="text-xs text-muted-foreground">
+        <span className="font-semibold text-foreground">NDR methodology note:</span> Calculated only on customers with {">"}$10K ARR — a self-selecting cohort of the healthiest accounts. Excludes smaller customers. The company pre-warns this metric may "fluctuate or decline" due to pricing changes, growing revenue base, and the March 2025 billing model update which introduced administrator controls that may inhibit seat upgrades.
+      </p>
     </div>
 
     {/* Customer Tier Charts */}

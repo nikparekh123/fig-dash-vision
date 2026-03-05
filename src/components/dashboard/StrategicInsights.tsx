@@ -1,21 +1,26 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Quote, ShieldCheck, Users, Landmark } from "lucide-react";
+import { Quote, Cpu, Users, Layers, ShieldCheck } from "lucide-react";
 
 const insights = [
   {
-    icon: <ShieldCheck className="h-4 w-4 text-success" />,
-    title: "Why gross margin matters",
-    text: "High gross margins mean Figma keeps more from every dollar of revenue—fuel for R&D and global expansion.",
+    icon: <Cpu className="h-4 w-4 text-chart-amber" />,
+    title: "AI: Double-edged sword",
+    text: "Drives revenue growth but compresses margins — cost of revenue grew 112% vs 41% revenue growth. AI inference costs rising. Simultaneously threatens per-seat model if AI agents replace human collaborators.",
   },
   {
     icon: <Users className="h-4 w-4 text-chart-blue" />,
-    title: "Net dollar retention",
-    text: "Indicates Figma's products are sticky; customers not only stay but spend more over time.",
+    title: "2/3 of users are non-designers",
+    text: "Validates Figma as a cross-functional platform OS, not just a design tool. Developers, PMs, researchers, and marketers make up the majority of monthly active users.",
   },
   {
-    icon: <Landmark className="h-4 w-4 text-chart-amber" />,
-    title: "Strong cash position",
-    text: "Shields Figma from short-term shocks and enables aggressive investment in AI and platform growth.",
+    icon: <Layers className="h-4 w-4 text-danger" />,
+    title: "8 products, 1,886 employees",
+    text: "Execution risk: multi-product expansion (Dev Mode, Sites, Make, Buzz, Draw, Slides) while simultaneously managing AI billing model launch in March 2026.",
+  },
+  {
+    icon: <ShieldCheck className="h-4 w-4 text-success" />,
+    title: "FedRAMP authorized",
+    text: "Received FedRAMP authorization in early 2025, opening the U.S. federal government market — a new growth vector with high stickiness and long contract cycles.",
   },
 ];
 
@@ -38,8 +43,8 @@ const StrategicInsights = () => (
       </CardContent>
     </Card>
 
-    {/* Why These Stand Out */}
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+    {/* Strategic Insights */}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
       {insights.map((i) => (
         <Card key={i.title} className="border-border/50 bg-card/80 backdrop-blur-sm">
           <CardContent className="p-4">
