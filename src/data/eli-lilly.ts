@@ -187,4 +187,9 @@ export const eliLillyData: CompanyData = {
     { headline: "Lilly announces $9B manufacturing expansion to meet GLP-1 demand", source: "Reuters", date: "Jan 20, 2025", url: "https://www.reuters.com" },
     { headline: "FDA approves Zepbound for obstructive sleep apnea, expanding indications", source: "FDA", date: "Dec 20, 2024", url: "https://www.fda.gov" },
   ],
+  positions: {
+    status: "waiting",
+    positions: [],
+    note: "Position pending entry — awaiting pullback for better risk/reward",
+  },
 };

@@ -53,6 +53,8 @@ const CompanyDashboard = () => {
 
           <KpiCards data={company.kpis} />
 
+          <PositionStatus data={company.positions} />
+
           <div>
             <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Investment Thesis</h2>
             <SummarySection data={company.summary} />

@@ -167,7 +167,43 @@ export interface NewsItem {
   url: string;
 }
 
+export interface PositionItem {
+  type: "stock" | "put" | "call";
+  description: string;
+  quantity: number;
+  avgPrice: number;
+  currentPrice: number;
+}
+
+export interface PositionData {
+  status: "live" | "waiting";
+  positions: PositionItem[];
+  note?: string;
+}
+
 export interface CompanyData {
+  name: string;
+  ticker: string;
+  exchange: string;
+  slug: string;
+  color: string;
+  quarter: string;
+  lastUpdated: string;
+  kpis: KpiItem[];
+  summary: SummaryData;
+  revenueChart: RevenueChartData;
+  profitabilityChart: ProfitabilityChartData;
+  keyMetrics: KeyMetricItem[];
+  marketPenetration: MarketPenetrationData;
+  ownership: OwnershipData;
+  customerRetention: RetentionData;
+  guidance: GuidanceData;
+  technicalAnalysis: TechnicalData;
+  strategicInsights: StrategicInsightsData;
+  analysts: AnalystData;
+  news: NewsItem[];
+  positions: PositionData;
+}
   name: string;
   ticker: string;
   exchange: string;

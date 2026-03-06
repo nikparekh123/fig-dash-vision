@@ -2,6 +2,7 @@ import { figmaData } from "./figma";
 import { netflixData } from "./netflix";
 import { cignaData } from "./cigna";
 import { eliLillyData } from "./eli-lilly";
+import { integratedSensorData } from "./integrated-sensor";
 import type { CompanyData } from "./types";
 
 export const companies: CompanyData[] = [
@@ -9,6 +10,7 @@ export const companies: CompanyData[] = [
   netflixData,
   cignaData,
   eliLillyData,
+  integratedSensorData,
 ];
 
 export const getCompanyBySlug = (slug: string): CompanyData | undefined =>

@@ -196,4 +196,12 @@ export const figmaData: CompanyData = {
     { headline: "Figma expands AI-powered design features across all product tiers", source: "TechCrunch", date: "Feb 12, 2026", url: "https://techcrunch.com" },
     { headline: "High-value customer cohort ($100K+ ARR) grows 42% year-over-year", source: "Figma", date: "Feb 8, 2026", url: "https://investor.figma.com" },
   ],
+  positions: {
+    status: "live",
+    positions: [
+      { type: "stock", description: "FIG", quantity: 4000, avgPrice: 29.73, currentPrice: 29.30 },
+      { type: "put", description: "JAN 15 '27 $20 Put", quantity: 40, avgPrice: 2.92, currentPrice: 3.00 },
+      { type: "call", description: "JAN 15 '27 $55 Call", quantity: -50, avgPrice: 3.05, currentPrice: 2.93 },
+    ],
+  },
 };
