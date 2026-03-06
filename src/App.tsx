@@ -4,7 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
-import Index from "./pages/Index";
+import Landing from "./pages/Landing";
+import CompanyDashboard from "./pages/CompanyDashboard";
 import ResetPassword from "./pages/ResetPassword";
 import SetPassword from "./pages/SetPassword";
 import AuthPage from "./components/AuthPage";
@@ -25,7 +26,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (!user) return <Navigate to="/login" replace />;
 
-  // Force first-login password setup
   if (user.user_metadata?.must_change_password) {
     return <Navigate to="/set-password" replace />;
   }
@@ -72,7 +72,8 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
+            <Route path="/company/:slug" element={<ProtectedRoute><CompanyDashboard /></ProtectedRoute>} />
             <Route path="/login" element={<PublicRoute><AuthPage /></PublicRoute>} />
             <Route path="/set-password" element={<SetPasswordRoute><SetPassword /></SetPasswordRoute>} />
             <Route path="/reset-password" element={<ResetPassword />} />
