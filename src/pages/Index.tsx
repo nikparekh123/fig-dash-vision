@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Figma, Clock } from "lucide-react";
+import LoginWall from "@/components/LoginWall";
 import KpiCards from "@/components/dashboard/KpiCards";
 import NewsSection from "@/components/dashboard/NewsSection";
 import RevenueChart from "@/components/dashboard/RevenueChart";
@@ -14,6 +16,14 @@ import MarketPenetration from "@/components/dashboard/MarketPenetration";
 import OwnershipStructure from "@/components/dashboard/OwnershipStructure";
 
 const Index = () => {
+  const [authenticated, setAuthenticated] = useState(
+    () => sessionStorage.getItem("authenticated") === "true"
+  );
+
+  if (!authenticated) {
+    return <LoginWall onAuthenticated={() => setAuthenticated(true)} />;
+  }
+
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
