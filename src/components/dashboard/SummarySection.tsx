@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, AlertTriangle, Scale } from "lucide-react";
+import type { SummaryData } from "@/data/types";
 
-const SummarySection = () => (
+const SummarySection = ({ data }: { data: SummaryData }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {/* Lynch Pitch */}
@@ -9,20 +10,17 @@ const SummarySection = () => (
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-success" />
-            <h3 className="text-base font-bold text-foreground">The Lynch Pitch — Why Own This?</h3>
+            <h3 className="text-base font-bold text-foreground">{data.lynchPitch.title}</h3>
           </div>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Figma is becoming the <span className="font-semibold text-foreground">operating system for digital product development</span>. It is not a design tool — it is the platform where the full lifecycle of building software happens, from whiteboard to shipped code. Every new product — Dev Mode, Figma Sites, Figma Make — deepens the workflow lock and creates a new billing surface.
-          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">{data.lynchPitch.description}</p>
           <div className="space-y-1.5 text-sm text-muted-foreground">
-            <p>• <span className="font-semibold text-success">41% revenue growth</span>, $1.66B cash, zero debt</p>
-            <p>• <span className="font-semibold text-success">136% NDR</span> — customers reliably spend more over time</p>
-            <p>• <span className="font-semibold text-success">23% FCF margin</span> ($242.7M) — real cash generation at scale</p>
-            <p>• <span className="font-semibold text-success">12% Non-GAAP operating margin</span> ($129.5M)</p>
+            {data.lynchPitch.bullets.map((b, i) => (
+              <p key={i}>• <span className="font-semibold text-success">{b}</span></p>
+            ))}
           </div>
           <div className="border-t border-success/20 pt-3">
             <p className="text-xs font-semibold text-foreground mb-1">What must go right:</p>
-            <p className="text-xs text-muted-foreground">AI credit billing transition (March 2026) must not trigger material churn. Non-GAAP margins must expand as the platform matures. New products (Sites, Make, Buzz, Draw) need to achieve adoption.</p>
+            <p className="text-xs text-muted-foreground">{data.lynchPitch.whatMustGoRight}</p>
           </div>
         </CardContent>
       </Card>
@@ -32,25 +30,23 @@ const SummarySection = () => (
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-danger" />
-            <h3 className="text-base font-bold text-foreground">The Munger Invert — How Could You Lose?</h3>
+            <h3 className="text-base font-bold text-foreground">{data.mungerInvert.title}</h3>
           </div>
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Paying a high price for a business whose <span className="font-semibold text-foreground">core monetization model is structurally threatened</span> by the same technology it is trying to monetize. AI is simultaneously Figma's growth narrative and its biggest existential risk.
-          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">{data.mungerInvert.description}</p>
           <div className="space-y-1.5 text-sm text-muted-foreground">
             <p className="text-xs font-semibold text-foreground mb-1">Watch signals:</p>
-            <p>• NDR declining below <span className="font-semibold text-danger">120%</span></p>
-            <p>• Gross margin continuing to fall from <span className="font-semibold text-danger">82.4%</span></p>
-            <p>• Billings growth decelerating faster than revenue growth</p>
-            <p>• Customer backlash against AI credit billing (March 2026)</p>
-            <p>• Competitor bundling full AI design at no additional cost</p>
+            {data.mungerInvert.watchSignals.map((s, i) => (
+              <p key={i}>• <span className="font-semibold text-danger">{s}</span></p>
+            ))}
           </div>
-          <div className="border-t border-danger/20 pt-3">
-            <p className="text-xs italic text-muted-foreground">
-              "...there could be a decrease in the number of designers, developers, and other collaborators that use our platform if such individuals are able to significantly increase their efficiency through the use of AI capabilities alongside or instead of our platform."
-            </p>
-            <p className="text-[10px] font-semibold text-muted-foreground mt-1">— Figma 10-K Risk Factors</p>
-          </div>
+          {data.mungerInvert.quote && (
+            <div className="border-t border-danger/20 pt-3">
+              <p className="text-xs italic text-muted-foreground">{data.mungerInvert.quote}</p>
+              {data.mungerInvert.quoteSource && (
+                <p className="text-[10px] font-semibold text-muted-foreground mt-1">— {data.mungerInvert.quoteSource}</p>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -62,17 +58,9 @@ const SummarySection = () => (
           <Scale className="h-4 w-4 text-chart-amber" />
           <h3 className="text-sm font-bold text-foreground">⚖️ The Verdict</h3>
         </div>
-        <p className="text-sm leading-relaxed text-muted-foreground">
-          Figma's GAAP financials look alarming (<span className="font-semibold text-danger">-$1.25B net loss</span>), but the headline number is distorted by{" "}
-          <span className="font-semibold text-foreground">$1.364B in stock-based compensation</span> — the vast majority from a one-time IPO-triggered RSU vesting event ($975.7M). Strip that out and the underlying business generated{" "}
-          <span className="font-semibold text-success">$129.5M in Non-GAAP operating income</span> at a 12% margin, with $242.7M in free cash flow.
-        </p>
-        <p className="text-sm leading-relaxed text-muted-foreground mt-3">
-          The central tension: <span className="font-semibold text-foreground">AI is both Figma's growth engine and its existential risk</span>. It drives product expansion but compresses gross margins (cost of revenue +112%) and threatens the per-seat pricing model the business is built on. The March 2026 AI credit billing rollout is the next critical test — if customers accept it, margins stabilize; if they balk, NDR could decline sharply.
-        </p>
-        <p className="text-sm leading-relaxed text-muted-foreground mt-3">
-          Investors need conviction that Figma can successfully navigate the transition from a <span className="font-semibold text-foreground">per-seat design tool</span> to a <span className="font-semibold text-foreground">usage-based platform OS</span> — while managing $759M in unrecognized CEO compensation that will weigh on GAAP results for years to come.
-        </p>
+        {data.verdict.map((p, i) => (
+          <p key={i} className={`text-sm leading-relaxed text-muted-foreground ${i > 0 ? "mt-3" : ""}`}>{p}</p>
+        ))}
       </CardContent>
     </Card>
   </div>
