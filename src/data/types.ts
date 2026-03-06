@@ -167,6 +167,20 @@ export interface NewsItem {
   url: string;
 }
 
+export interface PositionItem {
+  type: "stock" | "put" | "call";
+  description: string;
+  quantity: number;
+  avgPrice: number;
+  currentPrice: number;
+}
+
+export interface PositionData {
+  status: "live" | "waiting";
+  positions: PositionItem[];
+  note?: string;
+}
+
 export interface CompanyData {
   name: string;
   ticker: string;
@@ -188,4 +202,5 @@ export interface CompanyData {
   strategicInsights: StrategicInsightsData;
   analysts: AnalystData;
   news: NewsItem[];
+  positions: PositionData;
 }

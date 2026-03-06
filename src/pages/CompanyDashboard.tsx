@@ -15,6 +15,7 @@ import SummarySection from "@/components/dashboard/SummarySection";
 import TechnicalAnalysisSection from "@/components/dashboard/TechnicalAnalysisSection";
 import MarketPenetration from "@/components/dashboard/MarketPenetration";
 import OwnershipStructure from "@/components/dashboard/OwnershipStructure";
+import PositionStatus from "@/components/dashboard/PositionStatus";
 
 const CompanyDashboard = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -51,6 +52,8 @@ const CompanyDashboard = () => {
           </header>
 
           <KpiCards data={company.kpis} />
+
+          <PositionStatus data={company.positions} />
 
           <div>
             <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Investment Thesis</h2>

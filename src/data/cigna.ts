@@ -187,4 +187,9 @@ export const cignaData: CompanyData = {
     { headline: "Evernorth Health Services wins new large employer PBM contracts", source: "Bloomberg", date: "Dec 20, 2024", url: "https://www.bloomberg.com" },
     { headline: "Cigna Healthcare expands virtual care offerings across all plan types", source: "CNBC", date: "Dec 5, 2024", url: "https://www.cnbc.com" },
   ],
+  positions: {
+    status: "waiting",
+    positions: [],
+    note: "Position pending entry — monitoring for optimal entry point",
+  },
 };
