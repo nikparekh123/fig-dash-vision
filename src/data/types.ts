@@ -204,24 +204,3 @@ export interface CompanyData {
   news: NewsItem[];
   positions: PositionData;
 }
-  name: string;
-  ticker: string;
-  exchange: string;
-  slug: string;
-  color: string;
-  quarter: string;
-  lastUpdated: string;
-  kpis: KpiItem[];
-  summary: SummaryData;
-  revenueChart: RevenueChartData;
-  profitabilityChart: ProfitabilityChartData;
-  keyMetrics: KeyMetricItem[];
-  marketPenetration: MarketPenetrationData;
-  ownership: OwnershipData;
-  customerRetention: RetentionData;
-  guidance: GuidanceData;
-  technicalAnalysis: TechnicalData;
-  strategicInsights: StrategicInsightsData;
-  analysts: AnalystData;
-  news: NewsItem[];
-}
