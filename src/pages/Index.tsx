@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Figma, Clock } from "lucide-react";
-import LoginWall from "@/components/LoginWall";
+import { Figma, Clock, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 import KpiCards from "@/components/dashboard/KpiCards";
 import NewsSection from "@/components/dashboard/NewsSection";
 import RevenueChart from "@/components/dashboard/RevenueChart";
@@ -16,13 +16,7 @@ import MarketPenetration from "@/components/dashboard/MarketPenetration";
 import OwnershipStructure from "@/components/dashboard/OwnershipStructure";
 
 const Index = () => {
-  const [authenticated, setAuthenticated] = useState(
-    () => sessionStorage.getItem("authenticated") === "true"
-  );
-
-  if (!authenticated) {
-    return <LoginWall onAuthenticated={() => setAuthenticated(true)} />;
-  }
+  const { signOut, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background px-4 py-8 md:px-8">
@@ -43,9 +37,15 @@ const Index = () => {
               <p className="text-sm text-muted-foreground">Q4 2025 Earnings Dashboard</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Clock className="h-3.5 w-3.5" />
-            <span>Last updated: March 4, 2026</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Clock className="h-3.5 w-3.5" />
+              <span>Last updated: March 4, 2026</span>
+            </div>
+            <Button variant="ghost" size="sm" onClick={signOut} className="gap-1.5">
+              <LogOut className="h-3.5 w-3.5" />
+              Sign Out
+            </Button>
           </div>
         </header>
 
@@ -64,13 +64,13 @@ const Index = () => {
           <ProfitabilityChart />
         </div>
 
-        {/* 4. Key Metrics (financial deep dive) */}
+        {/* 4. Key Metrics */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">🚀 Key Financial Metrics</h2>
           <KeyMetrics />
         </div>
 
-        {/* 5. Market Penetration & Growth Runway */}
+        {/* 5. Market Penetration */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">🎯 Market Penetration & Growth Runway</h2>
           <MarketPenetration />
@@ -82,37 +82,37 @@ const Index = () => {
           <OwnershipStructure />
         </div>
 
-        {/* 6. Customer Retention & Growth */}
+        {/* 7. Customer Retention */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Customer Retention & Growth</h2>
           <CustomerRetentionSection />
         </div>
 
-        {/* 7. Forward Guidance */}
+        {/* 8. Forward Guidance */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">Forward Guidance</h2>
           <GuidanceSection />
         </div>
 
-        {/* 8. Technical Analysis */}
+        {/* 9. Technical Analysis */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">📈 Technical Analysis</h2>
           <TechnicalAnalysisSection />
         </div>
 
-        {/* 9. Strategic Insights */}
+        {/* 10. Strategic Insights */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">🌎 Strategic Insights</h2>
           <StrategicInsights />
         </div>
 
-        {/* 10. Analyst Views */}
+        {/* 11. Analyst Views */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">Analyst Views</h2>
           <AnalystSection />
         </div>
 
-        {/* 11. Latest News */}
+        {/* 12. Latest News */}
         <div>
           <h2 className="mb-4 text-lg font-semibold text-foreground">Latest News</h2>
           <NewsSection />
