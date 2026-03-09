@@ -85,11 +85,11 @@ export const netflixData: CompanyData = {
     ],
   },
   keyMetrics: [
-    { label: "Operating Margin", value: "29.5%", sub: "FY2025 — up from 26.7% in FY2024. Targeting 31.5% in 2026.", accent: "success" },
-    { label: "Ad Revenue", value: "$1.5B+", sub: "Ad tier revenue grew 2.5x YoY — fastest growing segment", accent: "success" },
-    { label: "Free Cash Flow", value: "~$8B", sub: "Strong cash generation enabling buybacks and acquisitions", accent: "blue" },
-    { label: "Content Spend", value: "$17B", sub: "FY2025 content amortization — disciplined spend growth", accent: "amber" },
-    { label: "Paid Members", value: "325M", sub: "Crossed 325M milestone in Q4 2025, +16% YoY", accent: "success" },
+    { label: "Free Cash Flow", value: "$9.5B", sub: "FY2025A (JP Morgan). Company guides ~$11B in FY2026. Supports buybacks and optionality.", accent: "success" },
+    { label: "Net Debt / EBITDA", value: "0.3x", sub: "Underlevered at $4.4B net debt. $9B cash, $13.5B LT debt. Balance sheet is a source of strength.", accent: "success" },
+    { label: "Content Amortization", value: "$16.4B", sub: "36.3% of FY2025 revenue — declining as % of rev as scale grows. Cash costs surging to ~$19.8B in 2026.", accent: "amber" },
+    { label: "Ad Revenue", value: "$1.5B", sub: "FY2025 — grew 2.5x YoY. Expected to double to ~$3B in 2026. 60M+ ad-tier subs (18.2% of total).", accent: "blue" },
+    { label: "ROE", value: "42.8%", sub: "FY2025A — exceptional capital efficiency. Shareholders' equity $26.6B.", accent: "success" },
   ],
   marketPenetration: {
     tam: { percentage: "~20%", market: "~1.6B broadband households", description: "325M paid members out of ~1.6B global broadband households. Significant room for growth in Asia-Pacific, Africa, and ad-tier conversions." },
