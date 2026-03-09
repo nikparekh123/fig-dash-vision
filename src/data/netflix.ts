@@ -7,7 +7,7 @@ export const netflixData: CompanyData = {
   slug: "netflix",
   color: "hsl(0, 75%, 50%)",
   quarter: "Q4 2025",
-  lastUpdated: "January 21, 2026",
+  lastUpdated: "March 9, 2026",
   kpis: [
     { title: "Q4 Revenue", value: "$12.05B", change: "+18% YoY", positive: true },
     { title: "EPS", value: "$6.26", change: "Beat $5.87 est.", positive: true, subtitle: "+7%" },
