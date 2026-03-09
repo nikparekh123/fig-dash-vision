@@ -184,13 +184,13 @@ export const netflixData: CompanyData = {
   },
   analysts: {
     analysts: [
-      { firm: "Goldman Sachs", rating: "Buy", target: "$1,100", sentiment: "bullish" },
-      { firm: "JP Morgan", rating: "Overweight", target: "$1,050", sentiment: "bullish" },
-      { firm: "Morgan Stanley", rating: "Equal Weight", target: "$950", sentiment: "neutral", note: "Valuation stretched" },
+      { firm: "Needham", rating: "Buy", target: "$120", sentiment: "bullish", note: "WBD walkaway is a positive — regain $30-40/share lost during bidding war" },
+      { firm: "Barclays", rating: "Equal Weight", target: "$115", sentiment: "neutral", note: "Engagement stall is structural; ad growth needs sports investment" },
+      { firm: "JP Morgan", rating: "Overweight", target: "$120", sentiment: "bullish", note: "325M+ subs, ad revenue doubling, strong FCF generation" },
     ],
-    meanTarget: "$1,050",
-    currentPrice: "$982",
-    upside: "+7% upside",
+    meanTarget: "$118",
+    currentPrice: "$96",
+    upside: "+23% upside",
   },
   news: [
     { headline: "Netflix crosses 325M paid memberships, beats Q4 2025 revenue estimates", source: "Netflix", tag: "Earnings", date: "Jan 20, 2026", url: "https://ir.netflix.com" },
