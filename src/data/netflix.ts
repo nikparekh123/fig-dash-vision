@@ -155,9 +155,11 @@ export const netflixData: CompanyData = {
   },
   guidance: {
     items: [
-      { title: "FY2026 Revenue", value: "$51B", details: ["~+13% YoY growth", "Accelerating ad revenue contribution"], accent: "success" },
-      { title: "FY2026 Op. Margin", value: "31.5%", details: ["+2pts expansion vs FY2025", "Driven by scale and ad mix"], accent: "success" },
-      { title: "Warner Bros. Close", value: "H2 2026", details: ["Pending regulatory approval", "~$5B+ deal value"], accent: "blue" },
+      { title: "FY2026 Revenue", value: "$51.4B", details: ["+13.9% YoY (Barclays est.)", "Driven by pricing, ads, and sub growth"], accent: "success" },
+      { title: "FY2026 OI Margin", value: "32.1%", details: ["Up from 29.5% in FY2025", "50bps M&A drag now removed from guide"], accent: "success" },
+      { title: "FY2026 Ad Revenue", value: "~$3B", details: ["2x YoY from $1.5B in FY2025", "CPM improvement + ad-tier sub growth"], accent: "blue" },
+      { title: "FY2026 FCF", value: "~$11B", details: ["Company guidance", "Up from $9.5B in FY2025"], accent: "success" },
+      { title: "Cash Content Costs", value: "~$19.8B", details: ["+10% YoY — above 6-7% historical avg", "Sports, live content, podcasts driving increase"], accent: "amber" },
     ],
   },
   technicalAnalysis: {
