@@ -79,8 +79,9 @@ export const netflixData: CompanyData = {
       { name: "Q4 2025", netIncome: 2700, ebitdaMargin: 33 },
     ],
     footnotes: [
-      { label: "FY2026E Operating Margin Target:", value: "31.5%", note: "+2pts expansion YoY" },
-      { label: "FY2025 Free Cash Flow:", value: "~$8B", note: "Strong cash generation supporting buybacks" },
+      { label: "FY2025 Free Cash Flow:", value: "$9.5B", note: "Per JP Morgan — strong cash generation enabling buybacks" },
+      { label: "Net Debt / EBITDA:", value: "0.3x", note: "Underlevered balance sheet — $9B cash vs $13.5B debt" },
+      { label: "FY2025 ROE:", value: "42.8%", note: "Exceptional capital efficiency" },
     ],
   },
   keyMetrics: [
