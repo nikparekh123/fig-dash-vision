@@ -193,11 +193,11 @@ export const netflixData: CompanyData = {
     upside: "+23% upside",
   },
   news: [
-    { headline: "Netflix crosses 325M paid memberships, beats Q4 2025 revenue estimates", source: "Netflix", tag: "Earnings", date: "Jan 20, 2026", url: "https://ir.netflix.com" },
-    { headline: "Netflix announces Warner Bros. Discovery acquisition for streaming dominance", source: "Reuters", tag: "M&A", date: "Jan 15, 2026", url: "https://www.reuters.com" },
-    { headline: "Netflix ad tier surpasses $1.5B in annual revenue", source: "Bloomberg", date: "Jan 10, 2026", url: "https://www.bloomberg.com" },
-    { headline: "Netflix expands live sports with NFL and WWE deal extensions", source: "CNBC", date: "Dec 18, 2025", url: "https://www.cnbc.com" },
-    { headline: "Netflix gaming downloads surpass 100M, signaling platform expansion", source: "TechCrunch", date: "Dec 5, 2025", url: "https://techcrunch.com" },
+    { headline: "Netflix walks away from Warner Bros. Discovery bid — receives $2.8B breakup fee", source: "Reuters", tag: "M&A", date: "Feb 27, 2026", url: "https://www.reuters.com" },
+    { headline: "NFLX stock surges 14% in single day as WBD deal collapses — regains $30-40/share", source: "Bloomberg", tag: "Market", date: "Feb 27, 2026", url: "https://www.bloomberg.com" },
+    { headline: "Netflix ad-supported tier surpasses $1.5B annual revenue with 60M+ subscribers", source: "JP Morgan Research", tag: "Advertising", date: "Mar 2, 2026", url: "https://www.jpmorgan.com" },
+    { headline: "Barclays flags structural engagement stall — viewing hours grew only 1-2% in 2025", source: "Barclays", tag: "Research", date: "Mar 2, 2026", url: "https://www.barclays.com" },
+    { headline: "Netflix cash content costs projected to surge to $19.8B in 2026 — sports and live driving increase", source: "Bloomberg Intelligence", tag: "Costs", date: "Mar 9, 2026", url: "https://www.bloomberg.com" },
   ],
   positions: {
     status: "live",
