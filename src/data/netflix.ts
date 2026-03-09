@@ -202,7 +202,7 @@ export const netflixData: CompanyData = {
   positions: {
     status: "live",
     positions: [
-      { type: "stock", description: "NFLX", quantity: 1000, avgPrice: 85.81, currentPrice: 98.06 },
+      { type: "stock", description: "NFLX", quantity: 1000, avgPrice: 85.81, currentPrice: 96.24 },
       { type: "put", description: "JAN 15 '27 $80 Put", quantity: 10, avgPrice: 9.16, currentPrice: 5.56 },
       { type: "call", description: "JAN 15 '27 $110 Call", quantity: 10, avgPrice: 5.11, currentPrice: 10.57 },
       { type: "call", description: "JAN 15 '27 $125 Call", quantity: -15, avgPrice: 5.93, currentPrice: 6.37 },
