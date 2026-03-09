@@ -172,14 +172,14 @@ export const netflixData: CompanyData = {
   },
   strategicInsights: {
     ceoQuote: {
-      text: '"We\'re focused on building the world\'s best entertainment platform. Our goal is to be the first choice for entertainment — not just in streaming, but across all forms of storytelling."',
-      author: "Ted Sarandos, Co-CEO",
+      text: '"Netflix has more room to raise US prices in 2026 and lift revenue growth now that its Warner deal is off the table, removing potential regulatory overhang. We also see a tailwind for operating margin given the 50 bps of M&A drag that management factored into its 31.5% guidance."',
+      author: "Bloomberg Intelligence, March 2026",
     },
     insights: [
-      { title: "Ad tier inflection", text: "Ad revenue hit $1.5B+ in 2025, growing 2.5x YoY. This high-margin stream could contribute 10%+ of revenue by 2027.", color: "success" },
-      { title: "Warner Bros. acquisition", text: "Transformative deal adding HBO, DC Universe, and Harry Potter IP — but integration risk is significant.", color: "blue" },
-      { title: "Content cost discipline", text: "$17B content spend is growing slower than revenue — key to margin expansion thesis.", color: "amber" },
-      { title: "Live events & gaming", text: "NFL, WWE, and gaming expanding Netflix beyond scripted content. New monetization vectors.", color: "success" },
+      { title: "Engagement stall — the structural risk", text: "Viewing hours grew only +1% in 1H25 and +2% in 2H25. This is not a content quality issue — it's structural. Free services (YouTube, Tubi) are the only platforms with consistent engagement growth. Ad revenue is engagement-dependent inventory.", color: "danger" },
+      { title: "Ad monetization — the second engine", text: "Ad revenue hit $1.5B in 2025 (2.5x YoY) with 60M+ ad-tier subs. Expected to double to ~$3B in 2026. Still under-monetized vs. total revenue — most valuation models don't isolate this growth.", color: "success" },
+      { title: "Sports rights escalation", text: "Netflix will have no choice but to participate more actively in sports. Ad pricing for sports is growing exponentially. NFL, WWE, and live events are table stakes — but rights costs have no ceiling.", color: "amber" },
+      { title: "AI disruption threat", text: "ByteDance's Seedance 2.0 and AI video generation models could lower barriers to content creation, fragment viewer attention, and erode the premium content differentiation that justifies Netflix's pricing advantage.", color: "danger" },
     ],
   },
   analysts: {
