@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Clock } from "lucide-react";
+import { Clock, RefreshCw } from "lucide-react";
 import { getCompanyBySlug } from "@/data/companies";
+import { useLivePrices } from "@/hooks/useLivePrices";
 import Navbar from "@/components/Navbar";
 import KpiCards from "@/components/dashboard/KpiCards";
 import NewsSection from "@/components/dashboard/NewsSection";
@@ -21,6 +23,35 @@ const CompanyDashboard = () => {
   const { slug } = useParams<{ slug: string }>();
   const company = getCompanyBySlug(slug || "");
 
+  // Get tickers for live positions
+  const tickers = useMemo(() => {
+    if (!company) return [];
+    return company.positions.positions.map((p) => p.description);
+  }, [company]);
+
+  const { prices, loading: pricesLoading, lastUpdated } = useLivePrices(tickers);
+
+  // Apply live prices to position data
+  const livePositionData = useMemo(() => {
+    if (!company) return company?.positions;
+    const updatedPositions = company.positions.positions.map((p) => ({
+      ...p,
+      currentPrice: prices[p.description] ?? p.currentPrice,
+    }));
+    return { ...company.positions, positions: updatedPositions };
+  }, [company, prices]);
+
+  // Apply live price to technical analysis
+  const liveTechnicalData = useMemo(() => {
+    if (!company) return company?.technicalAnalysis;
+    const ticker = company.ticker;
+    const livePrice = prices[ticker];
+    return {
+      ...company.technicalAnalysis,
+      currentPrice: livePrice ?? company.technicalAnalysis.currentPrice,
+    };
+  }, [company, prices]);
+
   if (!company) return <Navigate to="/" replace />;
 
   return (
@@ -32,11 +63,13 @@ const CompanyDashboard = () => {
           <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               {company.logo ? (
-                <img
-                  src={company.logo}
-                  alt={`${company.name} logo`}
-                  className="h-10 w-10 rounded-lg object-contain"
-                />
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/90 p-1">
+                  <img
+                    src={company.logo}
+                    alt={`${company.name} logo`}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
               ) : (
                 <div
                   className="flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-white"
@@ -53,15 +86,23 @@ const CompanyDashboard = () => {
                 <p className="text-sm text-muted-foreground">{company.quarter} Earnings Dashboard</p>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Last updated: {company.lastUpdated}</span>
+            <div className="flex items-center gap-3">
+              {lastUpdated && (
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <RefreshCw className={`h-3 w-3 ${pricesLoading ? "animate-spin" : ""}`} />
+                  <span>Prices: {lastUpdated.toLocaleTimeString()}</span>
+                </div>
+              )}
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Clock className="h-3.5 w-3.5" />
+                <span>Data: {company.lastUpdated}</span>
+              </div>
             </div>
           </header>
 
           <KpiCards data={company.kpis} />
 
-          <PositionStatus data={company.positions} />
+          <PositionStatus data={livePositionData!} />
 
           <div>
             <h2 className="mb-4 text-lg font-semibold text-foreground">📊 Investment Thesis</h2>
@@ -100,7 +141,7 @@ const CompanyDashboard = () => {
 
           <div>
             <h2 className="mb-4 text-lg font-semibold text-foreground">📈 Technical Analysis</h2>
-            <TechnicalAnalysisSection data={company.technicalAnalysis} />
+            <TechnicalAnalysisSection data={liveTechnicalData!} />
           </div>
 
           <div>

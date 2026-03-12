@@ -157,12 +157,12 @@ export const adobeData: CompanyData = {
     ],
   },
   technicalAnalysis: {
-    currentPrice: 375.50,
+    currentPrice: 273.71,
     emas: [
-      { label: "50 EMA", value: 390.20 },
-      { label: "200 EMA", value: 445.80 },
+      { label: "50 EMA", value: 340.20 },
+      { label: "200 EMA", value: 420.80 },
     ],
-    rsi: 42.5,
+    rsi: 28.5,
   },
   strategicInsights: {
     ceoQuote: {
@@ -183,20 +183,20 @@ export const adobeData: CompanyData = {
       { firm: "Barclays", rating: "Equal Weight", target: "$470", sentiment: "neutral", note: "Growth concerns" },
     ],
     meanTarget: "$533",
-    currentPrice: "$376",
-    upside: "+42% upside",
+    currentPrice: "$274",
+    upside: "+95% upside",
   },
   news: [
     { headline: "Adobe reports Q1 FY2025 revenue of $5.71B, up 10% YoY, beating estimates", source: "Adobe", tag: "Earnings", date: "Mar 12, 2025", url: "https://www.adobe.com/investor-relations" },
+    { headline: "Adobe stock tumbles despite record revenue — weak Q2 guidance disappoints", source: "Motley Fool", tag: "Market", date: "Mar 14, 2025", url: "https://www.fool.com" },
     { headline: "Adobe Firefly surpasses 16 billion generated images since launch", source: "Adobe", tag: "AI", date: "Mar 10, 2025", url: "https://www.adobe.com" },
     { headline: "Digital Media ARR reaches $17.6B as AI features drive subscriber expansion", source: "Adobe", date: "Mar 12, 2025", url: "https://www.adobe.com/investor-relations" },
-    { headline: "Adobe announces new Firefly Video model and AI-powered Premiere Pro features", source: "TechCrunch", date: "Feb 20, 2025", url: "https://techcrunch.com" },
     { headline: "Adobe expands Acrobat AI Assistant to all Document Cloud subscribers", source: "Bloomberg", date: "Jan 15, 2025", url: "https://www.bloomberg.com" },
   ],
   positions: {
     status: "live",
     positions: [
-      { type: "stock", description: "ADBE", quantity: 100, avgPrice: 278, currentPrice: 375.50 },
+      { type: "stock", description: "ADBE", quantity: 100, avgPrice: 278, currentPrice: 273.71 },
     ],
   },
 };

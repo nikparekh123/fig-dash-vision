@@ -166,12 +166,12 @@ export const netflixData: CompanyData = {
     ],
   },
   technicalAnalysis: {
-    currentPrice: 96.24,
+    currentPrice: 94.89,
     emas: [
       { label: "50 EMA", value: 89.50 },
       { label: "200 EMA", value: 78.40 },
     ],
-    rsi: 62.3,
+    rsi: 55.3,
   },
   strategicInsights: {
     ceoQuote: {
@@ -205,7 +205,7 @@ export const netflixData: CompanyData = {
   positions: {
     status: "live",
     positions: [
-      { type: "stock", description: "NFLX", quantity: 1000, avgPrice: 85.81, currentPrice: 96.24 },
+      { type: "stock", description: "NFLX", quantity: 1000, avgPrice: 85.81, currentPrice: 94.89 },
     ],
   },
 };

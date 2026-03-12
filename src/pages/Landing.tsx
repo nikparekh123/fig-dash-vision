@@ -1,15 +1,29 @@
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { companies } from "@/data/companies";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLivePrices } from "@/hooks/useLivePrices";
 import Navbar from "@/components/Navbar";
-import { TrendingUp, TrendingDown, Clock, DollarSign, BarChart3 } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, DollarSign, BarChart3, RefreshCw } from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Calculate global portfolio summary
+  // Collect all tickers from live positions
+  const allTickers = useMemo(() => {
+    return companies.flatMap((c) =>
+      c.positions.status === "live" ? c.positions.positions.map((p) => p.description) : []
+    );
+  }, []);
+
+  const { prices, loading: pricesLoading, lastUpdated } = useLivePrices(allTickers);
+
+  // Helper to get live current price
+  const getLivePrice = (ticker: string, fallback: number) => prices[ticker] ?? fallback;
+
+  // Calculate global portfolio summary with live prices
   const livePositions = companies.filter((c) => c.positions.status === "live");
   const waitingPositions = companies.filter((c) => c.positions.status === "waiting");
 
@@ -18,7 +32,7 @@ const Landing = () => {
   }, 0);
 
   const totalCurrentValue = livePositions.reduce((sum, c) => {
-    return sum + c.positions.positions.reduce((s, p) => s + p.quantity * p.currentPrice, 0);
+    return sum + c.positions.positions.reduce((s, p) => s + p.quantity * getLivePrice(p.description, p.currentPrice), 0);
   }, 0);
 
   const totalPnL = totalCurrentValue - totalInvested;
@@ -30,7 +44,7 @@ const Landing = () => {
       return { label: "Watching", color: "text-amber-400", bgColor: "bg-amber-400/10 border-amber-400/20" };
     }
     const pnl = c.positions.positions.reduce(
-      (s, p) => s + p.quantity * (p.currentPrice - p.avgPrice),
+      (s, p) => s + p.quantity * (getLivePrice(p.description, p.currentPrice) - p.avgPrice),
       0
     );
     if (pnl >= 0) {
@@ -57,6 +71,12 @@ const Landing = () => {
               Earnings Dashboard
             </h1>
             <p className="text-muted-foreground">Select a company to view detailed financial analysis</p>
+            {lastUpdated && (
+              <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+                <RefreshCw className={`h-3 w-3 ${pricesLoading ? "animate-spin" : ""}`} />
+                <span>Prices updated: {lastUpdated.toLocaleTimeString()}</span>
+              </div>
+            )}
           </div>
 
           {/* Global Portfolio Summary */}
