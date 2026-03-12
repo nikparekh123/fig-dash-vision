@@ -221,7 +221,7 @@ const Landing = () => {
               {c.name}
             </h2>
             <p className="text-xs text-muted-foreground">{c.exchange}: {c.ticker}</p>
-            {size !== "small" && <p className="text-xs text-muted-foreground/70">{c.sector}</p>}
+            {size !== "small" && <p className="text-xs text-muted-foreground/70">{c.industry} — {c.sector}</p>}
           </div>
           {size === "big" && (
             <div className="rounded-full bg-secondary px-3 py-1">
