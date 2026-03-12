@@ -166,7 +166,7 @@ const Landing = () => {
               <span className="font-semibold text-foreground group-hover:text-primary transition-colors">{c.name}</span>
               <span className="text-xs text-muted-foreground">{c.exchange}:{c.ticker}</span>
             </div>
-            <p className="text-xs text-muted-foreground/70 truncate">{c.sector}</p>
+            <p className="text-xs text-muted-foreground/70 truncate">{c.industry} — {c.sector}</p>
           </div>
           <span className="text-xs text-muted-foreground">{c.quarter}</span>
           <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full border ${posSummary.bgColor} ${posSummary.color}`}>
