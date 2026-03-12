@@ -23,6 +23,7 @@ import PositionStatus from "@/components/dashboard/PositionStatus";
 const CompanyDashboard = () => {
   const { slug } = useParams<{ slug: string }>();
   const company = getCompanyBySlug(slug || "");
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   // Get tickers for live positions
   const tickers = useMemo(() => {
