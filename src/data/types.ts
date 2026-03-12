@@ -181,6 +181,12 @@ export interface PositionData {
   note?: string;
 }
 
+export interface HistoryEntry {
+  date: string;
+  quarter: string;
+  summary: string;
+}
+
 export interface CompanyData {
   name: string;
   ticker: string;
@@ -188,8 +194,10 @@ export interface CompanyData {
   slug: string;
   color: string;
   logo?: string;
+  industry: string;
   sector: string;
   quarter: string;
+  earningsDate: string;
   lastUpdated: string;
   kpis: KpiItem[];
   summary: SummaryData;
@@ -205,4 +213,5 @@ export interface CompanyData {
   analysts: AnalystData;
   news: NewsItem[];
   positions: PositionData;
+  history?: HistoryEntry[];
 }

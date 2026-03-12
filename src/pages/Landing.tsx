@@ -33,6 +33,7 @@ const Landing = () => {
   const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState<string | null>(null);
+  const [industryFilter, setIndustryFilter] = useState<string>("all");
   const [sectorFilter, setSectorFilter] = useState<string>("all");
   const [earningsFilter, setEarningsFilter] = useState<string>("all");
   const [pnlFilter, setPnlFilter] = useState<string>("all");
@@ -81,6 +82,7 @@ const Landing = () => {
   };
 
   // Unique filter options
+  const industries = useMemo(() => [...new Set(companies.map((c) => c.industry))].sort(), []);
   const sectors = useMemo(() => [...new Set(companies.map((c) => c.sector))].sort(), []);
   const quarters = useMemo(() => [...new Set(companies.map((c) => c.quarter))].sort(), []);
 
@@ -96,30 +98,34 @@ const Landing = () => {
   };
 
   // Filter companies
-  const filteredCompanies = companies.filter((c) => {
-    const q = search.toLowerCase();
-    const matchSearch = c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q) || c.sector.toLowerCase().includes(q);
-    const matchSector = sectorFilter === "all" || c.sector === sectorFilter;
-    const matchEarnings = earningsFilter === "all" || c.quarter === earningsFilter;
-    const matchPnl = (() => {
-      if (pnlFilter === "all") return true;
-      if (c.positions.status === "waiting") return pnlFilter === "watching";
-      const pnl = c.positions.positions.reduce(
-        (s, p) => s + p.quantity * (getLivePrice(p.description, p.currentPrice) - p.avgPrice), 0
-      );
-      if (pnlFilter === "profit") return pnl >= 0;
-      if (pnlFilter === "loss") return pnl < 0;
-      return true;
-    })();
-    return matchSearch && matchSector && matchEarnings && matchPnl;
-  });
+  const filteredCompanies = [...companies]
+    .sort((a, b) => new Date(b.earningsDate).getTime() - new Date(a.earningsDate).getTime())
+    .filter((c) => {
+      const q = search.toLowerCase();
+      const matchSearch = c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q) || c.sector.toLowerCase().includes(q) || c.industry.toLowerCase().includes(q);
+      const matchIndustry = industryFilter === "all" || c.industry === industryFilter;
+      const matchSector = sectorFilter === "all" || c.sector === sectorFilter;
+      const matchEarnings = earningsFilter === "all" || c.quarter === earningsFilter;
+      const matchPnl = (() => {
+        if (pnlFilter === "all") return true;
+        if (c.positions.status === "waiting") return pnlFilter === "watching";
+        const pnl = c.positions.positions.reduce(
+          (s, p) => s + p.quantity * (getLivePrice(p.description, p.currentPrice) - p.avgPrice), 0
+        );
+        if (pnlFilter === "profit") return pnl >= 0;
+        if (pnlFilter === "loss") return pnl < 0;
+        return true;
+      })();
+      return matchSearch && matchIndustry && matchSector && matchEarnings && matchPnl;
+    });
 
   // Group helpers
   const groupBySector = () => {
     const groups: Record<string, typeof filteredCompanies> = {};
     filteredCompanies.forEach((c) => {
-      if (!groups[c.sector]) groups[c.sector] = [];
-      groups[c.sector].push(c);
+      const key = `${c.industry} — ${c.sector}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(c);
     });
     return groups;
   };
@@ -133,7 +139,7 @@ const Landing = () => {
     return groups;
   };
 
-  const hasActiveFilters = sectorFilter !== "all" || earningsFilter !== "all" || pnlFilter !== "all" || search !== "";
+  const hasActiveFilters = industryFilter !== "all" || sectorFilter !== "all" || earningsFilter !== "all" || pnlFilter !== "all" || search !== "";
 
   // Company card renderer
   const renderCompanyCard = (c: (typeof companies)[0], size: "big" | "medium" | "small" | "list") => {
@@ -160,7 +166,7 @@ const Landing = () => {
               <span className="font-semibold text-foreground group-hover:text-primary transition-colors">{c.name}</span>
               <span className="text-xs text-muted-foreground">{c.exchange}:{c.ticker}</span>
             </div>
-            <p className="text-xs text-muted-foreground/70 truncate">{c.sector}</p>
+            <p className="text-xs text-muted-foreground/70 truncate">{c.industry} — {c.sector}</p>
           </div>
           <span className="text-xs text-muted-foreground">{c.quarter}</span>
           <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full border ${posSummary.bgColor} ${posSummary.color}`}>
@@ -215,7 +221,7 @@ const Landing = () => {
               {c.name}
             </h2>
             <p className="text-xs text-muted-foreground">{c.exchange}: {c.ticker}</p>
-            {size !== "small" && <p className="text-xs text-muted-foreground/70">{c.sector}</p>}
+            {size !== "small" && <p className="text-xs text-muted-foreground/70">{c.industry} — {c.sector}</p>}
           </div>
           {size === "big" && (
             <div className="rounded-full bg-secondary px-3 py-1">
@@ -521,6 +527,19 @@ const Landing = () => {
                 )}
               </div>
 
+              {/* Industry Filter */}
+              <Select value={industryFilter} onValueChange={setIndustryFilter}>
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                  <SelectValue placeholder="Industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Industries</SelectItem>
+                  {industries.map((i) => (
+                    <SelectItem key={i} value={i}>{i}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               {/* Sector Filter */}
               <Select value={sectorFilter} onValueChange={setSectorFilter}>
                 <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
@@ -562,7 +581,7 @@ const Landing = () => {
 
               {hasActiveFilters && (
                 <button
-                  onClick={() => { setSearch(""); setSectorFilter("all"); setEarningsFilter("all"); setPnlFilter("all"); }}
+                  onClick={() => { setSearch(""); setIndustryFilter("all"); setSectorFilter("all"); setEarningsFilter("all"); setPnlFilter("all"); }}
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Clear all

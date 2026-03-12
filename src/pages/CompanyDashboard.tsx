@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Clock, RefreshCw } from "lucide-react";
+import { Clock, RefreshCw, History } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getCompanyBySlug } from "@/data/companies";
 import { useLivePrices } from "@/hooks/useLivePrices";
 import Navbar from "@/components/Navbar";
@@ -22,6 +23,7 @@ import PositionStatus from "@/components/dashboard/PositionStatus";
 const CompanyDashboard = () => {
   const { slug } = useParams<{ slug: string }>();
   const company = getCompanyBySlug(slug || "");
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   // Get tickers for live positions
   const tickers = useMemo(() => {
@@ -87,6 +89,15 @@ const CompanyDashboard = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {company.history && company.history.length > 0 && (
+                <button
+                  onClick={() => setHistoryOpen(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-border/50 bg-card/80 px-3 py-1.5 text-xs text-muted-foreground hover:border-primary/40 hover:text-foreground transition-all"
+                >
+                  <History className="h-3.5 w-3.5" />
+                  <span>History ({company.history.length})</span>
+                </button>
+              )}
               {lastUpdated && (
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <RefreshCw className={`h-3 w-3 ${pricesLoading ? "animate-spin" : ""}`} />
@@ -164,6 +175,46 @@ const CompanyDashboard = () => {
           </footer>
         </div>
       </div>
+
+      {/* Page History Dialog */}
+      <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <History className="h-4 w-4" />
+              Page History — {company.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-1 mb-4">
+            <div className="flex items-center gap-2 p-3 rounded-lg border border-primary/30 bg-primary/5">
+              <div className="h-2 w-2 rounded-full bg-primary shrink-0" />
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-foreground">{company.quarter}</span>
+                  <span className="text-xs text-muted-foreground">{company.lastUpdated}</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">Current version</p>
+              </div>
+            </div>
+          </div>
+          {company.history && company.history.length > 0 ? (
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Previous Versions</h4>
+              {company.history.map((entry, idx) => (
+                <div key={idx} className="p-3 rounded-lg border border-border/50 bg-card/50">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-foreground">{entry.quarter}</span>
+                    <span className="text-xs text-muted-foreground">{entry.date}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{entry.summary}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-4">No previous versions available</p>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

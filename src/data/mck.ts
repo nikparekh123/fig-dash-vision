@@ -1,5 +1,6 @@
 import type { CompanyData } from "./types";
 import mckChart from "@/assets/charts/mck-chart.png";
+import mckLogo from "@/assets/logos/mck.png";
 
 export const mckData: CompanyData = {
   name: "McKesson Corporation",
@@ -7,8 +8,11 @@ export const mckData: CompanyData = {
   exchange: "NYSE",
   slug: "mck",
   color: "hsl(220, 65%, 50%)",
-  sector: "Healthcare — Pharmaceutical Distribution",
+  logo: mckLogo,
+  industry: "Healthcare",
+  sector: "Pharmaceutical Distribution",
   quarter: "Q3 FY2025",
+  earningsDate: "2025-02-05",
   lastUpdated: "February 5, 2025",
   kpis: [
     { title: "Q3 Revenue", value: "$95.3B", change: "+19% YoY", positive: true },
