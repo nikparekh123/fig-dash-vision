@@ -157,12 +157,12 @@ export const adobeData: CompanyData = {
     ],
   },
   technicalAnalysis: {
-    currentPrice: 375.50,
+    currentPrice: 273.71,
     emas: [
-      { label: "50 EMA", value: 390.20 },
-      { label: "200 EMA", value: 445.80 },
+      { label: "50 EMA", value: 340.20 },
+      { label: "200 EMA", value: 420.80 },
     ],
-    rsi: 42.5,
+    rsi: 28.5,
   },
   strategicInsights: {
     ceoQuote: {
