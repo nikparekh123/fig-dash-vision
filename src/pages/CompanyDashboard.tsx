@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { Clock, RefreshCw } from "lucide-react";
+import { Clock, RefreshCw, History } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getCompanyBySlug } from "@/data/companies";
 import { useLivePrices } from "@/hooks/useLivePrices";
 import Navbar from "@/components/Navbar";
