@@ -33,6 +33,7 @@ const Landing = () => {
   const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState<string | null>(null);
+  const [industryFilter, setIndustryFilter] = useState<string>("all");
   const [sectorFilter, setSectorFilter] = useState<string>("all");
   const [earningsFilter, setEarningsFilter] = useState<string>("all");
   const [pnlFilter, setPnlFilter] = useState<string>("all");
