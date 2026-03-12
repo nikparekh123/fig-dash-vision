@@ -581,7 +581,7 @@ const Landing = () => {
 
               {hasActiveFilters && (
                 <button
-                  onClick={() => { setSearch(""); setSectorFilter("all"); setEarningsFilter("all"); setPnlFilter("all"); }}
+                  onClick={() => { setSearch(""); setIndustryFilter("all"); setSectorFilter("all"); setEarningsFilter("all"); setPnlFilter("all"); }}
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Clear all
