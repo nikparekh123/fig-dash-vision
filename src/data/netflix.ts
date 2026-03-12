@@ -166,12 +166,12 @@ export const netflixData: CompanyData = {
     ],
   },
   technicalAnalysis: {
-    currentPrice: 96.24,
+    currentPrice: 94.89,
     emas: [
       { label: "50 EMA", value: 89.50 },
       { label: "200 EMA", value: 78.40 },
     ],
-    rsi: 62.3,
+    rsi: 55.3,
   },
   strategicInsights: {
     ceoQuote: {
