@@ -1,4 +1,5 @@
 import type { CompanyData } from "./types";
+import figmaLogo from "@/assets/logos/figma.png";
 
 export const figmaData: CompanyData = {
   name: "Figma",
@@ -6,6 +7,7 @@ export const figmaData: CompanyData = {
   exchange: "NYSE",
   slug: "figma",
   color: "hsl(262, 83%, 58%)",
+  logo: figmaLogo,
   quarter: "Q4 2025",
   lastUpdated: "March 4, 2026",
   kpis: [

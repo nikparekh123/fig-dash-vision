@@ -1,4 +1,5 @@
 import type { CompanyData } from "./types";
+import eliLillyLogo from "@/assets/logos/eli-lilly.png";
 
 export const eliLillyData: CompanyData = {
   name: "Eli Lilly",
@@ -6,6 +7,7 @@ export const eliLillyData: CompanyData = {
   exchange: "NYSE",
   slug: "eli-lilly",
   color: "hsl(0, 85%, 55%)",
+  logo: eliLillyLogo,
   quarter: "Q4 2024",
   lastUpdated: "February 19, 2025",
   kpis: [

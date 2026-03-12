@@ -187,6 +187,7 @@ export interface CompanyData {
   exchange: string;
   slug: string;
   color: string;
+  logo?: string;
   quarter: string;
   lastUpdated: string;
   kpis: KpiItem[];

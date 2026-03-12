@@ -1,4 +1,5 @@
 import type { CompanyData } from "./types";
+import issLogo from "@/assets/logos/integrated-sensor.png";
 
 export const integratedSensorData: CompanyData = {
   name: "Integrated Sensor Solutions",
@@ -6,6 +7,7 @@ export const integratedSensorData: CompanyData = {
   exchange: "OTC",
   slug: "integrated-sensor",
   color: "hsl(195, 70%, 42%)",
+  logo: issLogo,
   quarter: "Q4 2024",
   lastUpdated: "February 15, 2025",
   kpis: [
