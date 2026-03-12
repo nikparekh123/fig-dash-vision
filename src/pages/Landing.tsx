@@ -82,6 +82,7 @@ const Landing = () => {
   };
 
   // Unique filter options
+  const industries = useMemo(() => [...new Set(companies.map((c) => c.industry))].sort(), []);
   const sectors = useMemo(() => [...new Set(companies.map((c) => c.sector))].sort(), []);
   const quarters = useMemo(() => [...new Set(companies.map((c) => c.quarter))].sort(), []);
 
