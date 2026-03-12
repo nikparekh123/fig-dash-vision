@@ -123,8 +123,9 @@ const Landing = () => {
   const groupBySector = () => {
     const groups: Record<string, typeof filteredCompanies> = {};
     filteredCompanies.forEach((c) => {
-      if (!groups[c.sector]) groups[c.sector] = [];
-      groups[c.sector].push(c);
+      const key = `${c.industry} — ${c.sector}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(c);
     });
     return groups;
   };
