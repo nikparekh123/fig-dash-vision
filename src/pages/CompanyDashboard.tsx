@@ -89,6 +89,15 @@ const CompanyDashboard = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              {company.history && company.history.length > 0 && (
+                <button
+                  onClick={() => setHistoryOpen(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-border/50 bg-card/80 px-3 py-1.5 text-xs text-muted-foreground hover:border-primary/40 hover:text-foreground transition-all"
+                >
+                  <History className="h-3.5 w-3.5" />
+                  <span>History ({company.history.length})</span>
+                </button>
+              )}
               {lastUpdated && (
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <RefreshCw className={`h-3 w-3 ${pricesLoading ? "animate-spin" : ""}`} />
