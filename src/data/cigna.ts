@@ -154,12 +154,14 @@ export const cignaData: CompanyData = {
     ],
   },
   technicalAnalysis: {
-    currentPrice: 269.97,
+    currentPrice: 265.88,
+    chartImage: cignaChart,
     emas: [
-      { label: "50 EMA", value: 285.40 },
-      { label: "200 EMA", value: 310.20 },
+      { label: "50 EMA", value: 279.09 },
+      { label: "100 EMA", value: 281.33 },
+      { label: "200 EMA", value: 288.47 },
     ],
-    rsi: 38.2,
+    rsi: 38.07,
   },
   strategicInsights: {
     ceoQuote: {
