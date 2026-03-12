@@ -31,12 +31,20 @@ const CompanyDashboard = () => {
           {/* Header */}
           <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
-              <div
-                className="flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-white"
-                style={{ backgroundColor: company.color }}
-              >
-                {company.name.charAt(0)}
-              </div>
+              {company.logo ? (
+                <img
+                  src={company.logo}
+                  alt={`${company.name} logo`}
+                  className="h-10 w-10 rounded-lg object-contain"
+                />
+              ) : (
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-white"
+                  style={{ backgroundColor: company.color }}
+                >
+                  {company.name.charAt(0)}
+                </div>
+              )}
               <div className="space-y-0.5">
                 <div className="flex items-baseline gap-2">
                   <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">{company.name}</h1>

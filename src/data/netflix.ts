@@ -1,4 +1,5 @@
 import type { CompanyData } from "./types";
+import netflixLogo from "@/assets/logos/netflix.png";
 
 export const netflixData: CompanyData = {
   name: "Netflix",
@@ -6,6 +7,7 @@ export const netflixData: CompanyData = {
   exchange: "NASDAQ",
   slug: "netflix",
   color: "hsl(0, 75%, 50%)",
+  logo: netflixLogo,
   quarter: "Q4 2025",
   lastUpdated: "March 9, 2026",
   kpis: [

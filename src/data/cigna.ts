@@ -1,4 +1,5 @@
 import type { CompanyData } from "./types";
+import cignaLogo from "@/assets/logos/cigna.png";
 
 export const cignaData: CompanyData = {
   name: "The Cigna Group",
@@ -6,6 +7,7 @@ export const cignaData: CompanyData = {
   exchange: "NYSE",
   slug: "cigna",
   color: "hsl(210, 75%, 40%)",
+  logo: cignaLogo,
   quarter: "Q4 2024",
   lastUpdated: "January 30, 2025",
   kpis: [

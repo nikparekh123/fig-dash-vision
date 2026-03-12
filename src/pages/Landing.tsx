@@ -28,12 +28,20 @@ const Landing = () => {
                 className="group cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200"
               >
                 <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-2xl text-2xl font-bold text-white transition-transform group-hover:scale-110"
-                    style={{ backgroundColor: c.color }}
-                  >
-                    {c.name.charAt(0)}
-                  </div>
+                  {c.logo ? (
+                    <img
+                      src={c.logo}
+                      alt={`${c.name} logo`}
+                      className="h-16 w-16 rounded-2xl object-contain transition-transform group-hover:scale-110"
+                    />
+                  ) : (
+                    <div
+                      className="flex h-16 w-16 items-center justify-center rounded-2xl text-2xl font-bold text-white transition-transform group-hover:scale-110"
+                      style={{ backgroundColor: c.color }}
+                    >
+                      {c.name.charAt(0)}
+                    </div>
+                  )}
                   <div className="space-y-1">
                     <h2 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                       {c.name}
