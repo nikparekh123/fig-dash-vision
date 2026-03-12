@@ -205,7 +205,7 @@ export const netflixData: CompanyData = {
   positions: {
     status: "live",
     positions: [
-      { type: "stock", description: "NFLX", quantity: 1000, avgPrice: 85.81, currentPrice: 96.24 },
+      { type: "stock", description: "NFLX", quantity: 1000, avgPrice: 85.81, currentPrice: 94.89 },
     ],
   },
 };
