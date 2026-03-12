@@ -1,5 +1,6 @@
 import type { CompanyData } from "./types";
 import cignaLogo from "@/assets/logos/cigna.png";
+import cignaChart from "@/assets/charts/cigna-chart.png";
 
 export const cignaData: CompanyData = {
   name: "The Cigna Group",
