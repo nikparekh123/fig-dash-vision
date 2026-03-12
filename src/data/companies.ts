@@ -3,11 +3,13 @@ import { netflixData } from "./netflix";
 import { cignaData } from "./cigna";
 import { eliLillyData } from "./eli-lilly";
 import { integratedSensorData } from "./integrated-sensor";
+import { adobeData } from "./adobe";
 import type { CompanyData } from "./types";
 
 export const companies: CompanyData[] = [
   figmaData,
   netflixData,
+  adobeData,
   cignaData,
   eliLillyData,
   integratedSensorData,
