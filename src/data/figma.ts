@@ -200,8 +200,6 @@ export const figmaData: CompanyData = {
     status: "live",
     positions: [
       { type: "stock", description: "FIG", quantity: 4000, avgPrice: 29.73, currentPrice: 29.30 },
-      { type: "put", description: "JAN 15 '27 $20 Put", quantity: 40, avgPrice: 2.92, currentPrice: 3.00 },
-      { type: "call", description: "JAN 15 '27 $55 Call", quantity: -50, avgPrice: 3.05, currentPrice: 2.93 },
     ],
   },
 };
