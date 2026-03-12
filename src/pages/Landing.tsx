@@ -139,7 +139,7 @@ const Landing = () => {
     return groups;
   };
 
-  const hasActiveFilters = sectorFilter !== "all" || earningsFilter !== "all" || pnlFilter !== "all" || search !== "";
+  const hasActiveFilters = industryFilter !== "all" || sectorFilter !== "all" || earningsFilter !== "all" || pnlFilter !== "all" || search !== "";
 
   // Company card renderer
   const renderCompanyCard = (c: (typeof companies)[0], size: "big" | "medium" | "small" | "list") => {
