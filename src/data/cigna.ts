@@ -9,8 +9,10 @@ export const cignaData: CompanyData = {
   slug: "cigna",
   color: "hsl(210, 75%, 40%)",
   logo: cignaLogo,
-  sector: "Healthcare — Managed Care / PBM",
+  industry: "Healthcare",
+  sector: "Managed Care / PBM",
   quarter: "Q4 2024",
+  earningsDate: "2025-01-30",
   lastUpdated: "January 30, 2025",
   kpis: [
     { title: "Q4 Revenue", value: "$66.8B", change: "+27% YoY", positive: true },

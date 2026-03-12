@@ -8,8 +8,10 @@ export const integratedSensorData: CompanyData = {
   slug: "integrated-sensor",
   color: "hsl(195, 70%, 42%)",
   logo: issLogo,
-  sector: "Industrials — MEMS Sensors",
+  industry: "Industrials",
+  sector: "MEMS Sensors",
   quarter: "Q4 2024",
+  earningsDate: "2025-02-15",
   lastUpdated: "February 15, 2025",
   kpis: [
     { title: "Q4 Revenue", value: "$8.2M", change: "+12% YoY", positive: true },

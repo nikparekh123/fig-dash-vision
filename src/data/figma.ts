@@ -8,8 +8,10 @@ export const figmaData: CompanyData = {
   slug: "figma",
   color: "hsl(262, 83%, 58%)",
   logo: figmaLogo,
-  sector: "Technology — Design Software",
+  industry: "Technology",
+  sector: "Design Software",
   quarter: "Q4 2025",
+  earningsDate: "2026-03-04",
   lastUpdated: "March 4, 2026",
   kpis: [
     { title: "Q4 Revenue", value: "$303.8M", change: "+40% YoY", positive: true },

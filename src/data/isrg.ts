@@ -1,5 +1,6 @@
 import type { CompanyData } from "./types";
 import isrgChart from "@/assets/charts/isrg-chart.png";
+import isrgLogo from "@/assets/logos/isrg.png";
 
 export const isrgData: CompanyData = {
   name: "Intuitive Surgical",
@@ -7,8 +8,11 @@ export const isrgData: CompanyData = {
   exchange: "NASDAQ",
   slug: "isrg",
   color: "hsl(200, 70%, 45%)",
-  sector: "Healthcare — Medical Devices / Robotic Surgery",
+  logo: isrgLogo,
+  industry: "Healthcare",
+  sector: "Medical Devices / Robotic Surgery",
   quarter: "Q4 2024",
+  earningsDate: "2025-01-23",
   lastUpdated: "January 23, 2025",
   kpis: [
     { title: "Q4 Revenue", value: "$2.41B", change: "+25% YoY", positive: true },

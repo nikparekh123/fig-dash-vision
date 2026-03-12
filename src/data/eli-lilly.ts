@@ -8,8 +8,10 @@ export const eliLillyData: CompanyData = {
   slug: "eli-lilly",
   color: "hsl(0, 85%, 55%)",
   logo: eliLillyLogo,
-  sector: "Healthcare — Branded Pharmaceuticals",
+  industry: "Healthcare",
+  sector: "Branded Pharmaceuticals",
   quarter: "Q4 2024",
+  earningsDate: "2025-02-19",
   lastUpdated: "February 19, 2025",
   kpis: [
     { title: "FY2024 Revenue", value: "$45.0B", change: "+32% YoY", positive: true },
