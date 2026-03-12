@@ -98,23 +98,26 @@ const Landing = () => {
   };
 
   // Filter companies
-  const filteredCompanies = companies.filter((c) => {
-    const q = search.toLowerCase();
-    const matchSearch = c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q) || c.sector.toLowerCase().includes(q);
-    const matchSector = sectorFilter === "all" || c.sector === sectorFilter;
-    const matchEarnings = earningsFilter === "all" || c.quarter === earningsFilter;
-    const matchPnl = (() => {
-      if (pnlFilter === "all") return true;
-      if (c.positions.status === "waiting") return pnlFilter === "watching";
-      const pnl = c.positions.positions.reduce(
-        (s, p) => s + p.quantity * (getLivePrice(p.description, p.currentPrice) - p.avgPrice), 0
-      );
-      if (pnlFilter === "profit") return pnl >= 0;
-      if (pnlFilter === "loss") return pnl < 0;
-      return true;
-    })();
-    return matchSearch && matchSector && matchEarnings && matchPnl;
-  });
+  const filteredCompanies = [...companies]
+    .sort((a, b) => new Date(b.earningsDate).getTime() - new Date(a.earningsDate).getTime())
+    .filter((c) => {
+      const q = search.toLowerCase();
+      const matchSearch = c.name.toLowerCase().includes(q) || c.ticker.toLowerCase().includes(q) || c.sector.toLowerCase().includes(q) || c.industry.toLowerCase().includes(q);
+      const matchIndustry = industryFilter === "all" || c.industry === industryFilter;
+      const matchSector = sectorFilter === "all" || c.sector === sectorFilter;
+      const matchEarnings = earningsFilter === "all" || c.quarter === earningsFilter;
+      const matchPnl = (() => {
+        if (pnlFilter === "all") return true;
+        if (c.positions.status === "waiting") return pnlFilter === "watching";
+        const pnl = c.positions.positions.reduce(
+          (s, p) => s + p.quantity * (getLivePrice(p.description, p.currentPrice) - p.avgPrice), 0
+        );
+        if (pnlFilter === "profit") return pnl >= 0;
+        if (pnlFilter === "loss") return pnl < 0;
+        return true;
+      })();
+      return matchSearch && matchIndustry && matchSector && matchEarnings && matchPnl;
+    });
 
   // Group helpers
   const groupBySector = () => {
