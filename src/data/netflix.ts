@@ -8,6 +8,7 @@ export const netflixData: CompanyData = {
   slug: "netflix",
   color: "hsl(0, 75%, 50%)",
   logo: netflixLogo,
+  sector: "Communication Services — Streaming",
   quarter: "Q4 2025",
   lastUpdated: "March 9, 2026",
   kpis: [
