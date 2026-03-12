@@ -527,6 +527,19 @@ const Landing = () => {
                 )}
               </div>
 
+              {/* Industry Filter */}
+              <Select value={industryFilter} onValueChange={setIndustryFilter}>
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                  <SelectValue placeholder="Industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Industries</SelectItem>
+                  {industries.map((i) => (
+                    <SelectItem key={i} value={i}>{i}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               {/* Sector Filter */}
               <Select value={sectorFilter} onValueChange={setSectorFilter}>
                 <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
