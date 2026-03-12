@@ -163,12 +163,12 @@ export const figmaData: CompanyData = {
     ],
   },
   technicalAnalysis: {
-    currentPrice: 30.49,
+    currentPrice: 27.84,
     emas: [
       { label: "50 EMA", value: 30.35 },
       { label: "100 EMA", value: 38.95 },
     ],
-    rsi: 58.58,
+    rsi: 38.2,
   },
   strategicInsights: {
     ceoQuote: {
