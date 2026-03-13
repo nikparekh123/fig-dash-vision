@@ -1,10 +1,12 @@
 import type { CompanyData } from "./types";
+import geoLogo from "@/assets/logos/geo.png";
 
 export const geoData: CompanyData = {
   name: "The GEO Group",
   ticker: "GEO",
   exchange: "NYSE",
   slug: "geo",
+  logo: geoLogo,
   color: "hsl(210, 70%, 35%)",
   industry: "Industrials",
   sector: "Correctional & Detention Facilities",

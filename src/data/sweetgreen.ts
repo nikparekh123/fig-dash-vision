@@ -1,10 +1,12 @@
 import type { CompanyData } from "./types";
+import sweetgreenLogo from "@/assets/logos/sweetgreen.png";
 
 export const sweetgreenData: CompanyData = {
   name: "Sweetgreen",
   ticker: "SG",
   exchange: "NYSE",
   slug: "sweetgreen",
+  logo: sweetgreenLogo,
   color: "hsl(140, 60%, 40%)",
   industry: "Consumer Discretionary",
   sector: "Restaurants",
