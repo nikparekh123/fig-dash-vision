@@ -1,10 +1,12 @@
 import type { CompanyData } from "./types";
+import mondayLogo from "@/assets/logos/monday.png";
 
 export const mondayData: CompanyData = {
   name: "monday.com",
   ticker: "MNDY",
   exchange: "NASDAQ",
   slug: "monday",
+  logo: mondayLogo,
   color: "hsl(350, 80%, 50%)",
   industry: "Technology",
   sector: "Work Management Software",
