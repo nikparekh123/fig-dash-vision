@@ -3,6 +3,9 @@ import { netflixData } from "./netflix";
 import { cignaData } from "./cigna";
 import { eliLillyData } from "./eli-lilly";
 import { adobeData } from "./adobe";
+import { sweetgreenData } from "./sweetgreen";
+import { geoData } from "./geo";
+import { mondayData } from "./monday";
 import type { CompanyData } from "./types";
 
 export const companies: CompanyData[] = [
@@ -11,6 +14,9 @@ export const companies: CompanyData[] = [
   adobeData,
   cignaData,
   eliLillyData,
+  sweetgreenData,
+  geoData,
+  mondayData,
 ];
 
 export const getCompanyBySlug = (slug: string): CompanyData | undefined =>
