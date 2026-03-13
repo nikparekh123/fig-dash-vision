@@ -1,6 +1,6 @@
 import type { CompanyData } from "./types";
 import cignaLogo from "@/assets/logos/cigna.png";
-import cignaChart from "@/assets/charts/cigna-chart.png";
+
 
 export const cignaData: CompanyData = {
   name: "The Cigna Group",
@@ -158,7 +158,7 @@ export const cignaData: CompanyData = {
   },
   technicalAnalysis: {
     currentPrice: 265.88,
-    chartImage: cignaChart,
+    chartImage: "",
     emas: [
       { label: "50 EMA", value: 279.09 },
       { label: "100 EMA", value: 281.33 },
