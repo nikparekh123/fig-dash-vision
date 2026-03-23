@@ -3,6 +3,53 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+async function fetchFromYahooChart(ticker: string): Promise<number | null> {
+  try {
+    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const meta = data?.chart?.result?.[0]?.meta;
+    if (meta?.regularMarketPrice) return meta.regularMarketPrice;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchFromGoogleFinance(ticker: string): Promise<number | null> {
+  try {
+    // Try scraping Google Finance page
+    const url = `https://www.google.com/finance/quote/${encodeURIComponent(ticker)}:NYSE`;
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+    });
+    if (!res.ok) {
+      // Try NASDAQ
+      const url2 = `https://www.google.com/finance/quote/${encodeURIComponent(ticker)}:NASDAQ`;
+      const res2 = await fetch(url2, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      });
+      if (!res2.ok) return null;
+      const html2 = await res2.text();
+      return extractPriceFromGoogleFinance(html2);
+    }
+    const html = await res.text();
+    return extractPriceFromGoogleFinance(html);
+  } catch {
+    return null;
+  }
+}
+
+function extractPriceFromGoogleFinance(html: string): number | null {
+  // Google Finance embeds price in data-last-price attribute
+  const match = html.match(/data-last-price="([0-9.]+)"/);
+  if (match) return parseFloat(match[1]);
+  return null;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -18,57 +65,32 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Use Yahoo Finance v8 API (no key required)
-    const symbols = tickers.join(',');
-    const url = `https://query1.finance.yahoo.com/v8/finance/spark?symbols=${encodeURIComponent(symbols)}&range=1d&interval=1d`;
+    console.log('Fetching prices for:', tickers.join(','));
 
-    console.log('Fetching prices for:', symbols);
-
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0',
-      },
-    });
-
-    if (!response.ok) {
-      // Fallback: try v7 quote endpoint
-      const fallbackUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`;
-      const fallbackResponse = await fetch(fallbackUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0' },
-      });
-
-      if (!fallbackResponse.ok) {
-        throw new Error(`Yahoo Finance API failed with status ${fallbackResponse.status}`);
-      }
-
-      const fallbackData = await fallbackResponse.json();
-      const prices: Record<string, number> = {};
-
-      for (const quote of fallbackData.quoteResponse?.result || []) {
-        prices[quote.symbol] = quote.regularMarketPrice;
-      }
-
-      return new Response(
-        JSON.stringify({ success: true, prices }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const data = await response.json();
     const prices: Record<string, number> = {};
 
-    for (const ticker of tickers) {
-      const sparkData = data[ticker];
-      if (sparkData?.spark?.result?.[0]?.response?.[0]?.meta?.regularMarketPrice) {
-        prices[ticker] = sparkData.spark.result[0].response[0].meta.regularMarketPrice;
-      } else if (sparkData?.spark?.result?.[0]?.response?.[0]?.indicators?.quote?.[0]?.close) {
-        const closes = sparkData.spark.result[0].response[0].indicators.quote[0].close;
-        const lastClose = closes.filter((c: number | null) => c !== null).pop();
-        if (lastClose) prices[ticker] = lastClose;
+    // Fetch all tickers in parallel using Yahoo Chart API first, then Google Finance fallback
+    const results = await Promise.all(
+      tickers.map(async (ticker: string) => {
+        // Try Yahoo Chart API first
+        let price = await fetchFromYahooChart(ticker);
+        if (price) return { ticker, price };
+
+        // Fallback to Google Finance
+        price = await fetchFromGoogleFinance(ticker);
+        if (price) return { ticker, price };
+
+        return { ticker, price: null };
+      })
+    );
+
+    for (const r of results) {
+      if (r.price !== null) {
+        prices[r.ticker] = r.price;
       }
     }
 
-    console.log('Fetched prices:', prices);
+    console.log('Fetched prices:', JSON.stringify(prices));
 
     return new Response(
       JSON.stringify({ success: true, prices }),
