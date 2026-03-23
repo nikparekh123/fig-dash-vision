@@ -3,50 +3,80 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-async function fetchFromYahooChart(ticker: string): Promise<number | null> {
+async function fetchPrice(ticker: string): Promise<number | null> {
+  // Strategy 1: Yahoo Finance v8 chart API
   try {
-    const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1d&range=1d`;
+    console.log(`[${ticker}] Trying Yahoo chart: ${url}`);
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json',
+      },
     });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const meta = data?.chart?.result?.[0]?.meta;
-    if (meta?.regularMarketPrice) return meta.regularMarketPrice;
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-async function fetchFromGoogleFinance(ticker: string): Promise<number | null> {
-  try {
-    // Try scraping Google Finance page
-    const url = `https://www.google.com/finance/quote/${encodeURIComponent(ticker)}:NYSE`;
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-    });
-    if (!res.ok) {
-      // Try NASDAQ
-      const url2 = `https://www.google.com/finance/quote/${encodeURIComponent(ticker)}:NASDAQ`;
-      const res2 = await fetch(url2, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-      });
-      if (!res2.ok) return null;
-      const html2 = await res2.text();
-      return extractPriceFromGoogleFinance(html2);
+    console.log(`[${ticker}] Yahoo chart status: ${res.status}`);
+    if (res.ok) {
+      const data = await res.json();
+      const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if (price) {
+        console.log(`[${ticker}] Yahoo chart price: ${price}`);
+        return price;
+      }
+      console.log(`[${ticker}] Yahoo chart no price in response`);
     }
-    const html = await res.text();
-    return extractPriceFromGoogleFinance(html);
-  } catch {
-    return null;
+  } catch (e) {
+    console.error(`[${ticker}] Yahoo chart error:`, e);
   }
-}
 
-function extractPriceFromGoogleFinance(html: string): number | null {
-  // Google Finance embeds price in data-last-price attribute
-  const match = html.match(/data-last-price="([0-9.]+)"/);
-  if (match) return parseFloat(match[1]);
+  // Strategy 2: Yahoo Finance v6 quote API
+  try {
+    const url = `https://query1.finance.yahoo.com/v6/finance/quote?symbols=${encodeURIComponent(ticker)}`;
+    console.log(`[${ticker}] Trying Yahoo v6 quote`);
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+      },
+    });
+    console.log(`[${ticker}] Yahoo v6 status: ${res.status}`);
+    if (res.ok) {
+      const data = await res.json();
+      const price = data?.quoteResponse?.result?.[0]?.regularMarketPrice;
+      if (price) {
+        console.log(`[${ticker}] Yahoo v6 price: ${price}`);
+        return price;
+      }
+    }
+  } catch (e) {
+    console.error(`[${ticker}] Yahoo v6 error:`, e);
+  }
+
+  // Strategy 3: Google Finance scrape
+  try {
+    const exchanges = ['NYSE', 'NASDAQ'];
+    for (const exchange of exchanges) {
+      const url = `https://www.google.com/finance/quote/${encodeURIComponent(ticker)}:${exchange}`;
+      console.log(`[${ticker}] Trying Google Finance: ${url}`);
+      const res = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        },
+      });
+      console.log(`[${ticker}] Google Finance ${exchange} status: ${res.status}`);
+      if (res.ok) {
+        const html = await res.text();
+        const match = html.match(/data-last-price="([0-9.]+)"/);
+        if (match) {
+          const price = parseFloat(match[1]);
+          console.log(`[${ticker}] Google Finance price: ${price}`);
+          return price;
+        }
+      }
+    }
+  } catch (e) {
+    console.error(`[${ticker}] Google Finance error:`, e);
+  }
+
+  console.log(`[${ticker}] All strategies failed`);
   return null;
 }
 
@@ -69,18 +99,10 @@ Deno.serve(async (req) => {
 
     const prices: Record<string, number> = {};
 
-    // Fetch all tickers in parallel using Yahoo Chart API first, then Google Finance fallback
     const results = await Promise.all(
       tickers.map(async (ticker: string) => {
-        // Try Yahoo Chart API first
-        let price = await fetchFromYahooChart(ticker);
-        if (price) return { ticker, price };
-
-        // Fallback to Google Finance
-        price = await fetchFromGoogleFinance(ticker);
-        if (price) return { ticker, price };
-
-        return { ticker, price: null };
+        const price = await fetchPrice(ticker);
+        return { ticker, price };
       })
     );
 
