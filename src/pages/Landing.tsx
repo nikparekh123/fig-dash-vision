@@ -450,11 +450,11 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="px-4 py-12 md:px-8">
-        <div className="mx-auto max-w-5xl space-y-8">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Earnings Dashboard</h1>
-            <p className="text-muted-foreground">Select a company to view detailed financial analysis</p>
+      <div className="px-4 py-4 md:px-8">
+        <div className="mx-auto max-w-6xl space-y-4">
+          <div className="text-center space-y-1">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">Earnings Dashboard</h1>
+            <p className="text-sm text-muted-foreground">Select a company to view detailed financial analysis</p>
             {lastUpdated && (
               <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <RefreshCw className={`h-3 w-3 ${pricesLoading ? "animate-spin" : ""}`} />
