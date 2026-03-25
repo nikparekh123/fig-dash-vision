@@ -177,19 +177,19 @@ const Landing = () => {
     }
 
     const sizeClasses = {
-      big: "p-8",
-      medium: "p-5",
-      small: "p-3",
+    big: "p-4",
+      medium: "p-3",
+      small: "p-2.5",
     };
     const logoClasses = {
-      big: "h-16 w-16 rounded-2xl",
-      medium: "h-12 w-12 rounded-xl",
-      small: "h-9 w-9 rounded-lg",
+    big: "h-12 w-12 rounded-xl",
+      medium: "h-10 w-10 rounded-xl",
+      small: "h-8 w-8 rounded-lg",
     };
     const titleClasses = {
-      big: "text-xl",
-      medium: "text-base",
-      small: "text-sm",
+    big: "text-base",
+      medium: "text-sm",
+      small: "text-xs",
     };
 
     return (
@@ -198,7 +198,7 @@ const Landing = () => {
         onClick={() => navigate(`/company/${c.slug}`)}
         className="group cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200"
       >
-        <CardContent className={`${sizeClasses[size]} flex flex-col items-center text-center space-y-${size === "small" ? "2" : size === "medium" ? "3" : "4"}`}>
+        <CardContent className={`${sizeClasses[size]} flex flex-col items-center text-center space-y-2`}>
           <div className="w-full flex justify-end -mb-1">
             <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${posSummary.bgColor} ${posSummary.color}`}>
               {posSummary.label}
@@ -234,10 +234,10 @@ const Landing = () => {
   };
 
   const gridClasses: Record<ViewMode, string> = {
-    big: "grid grid-cols-1 gap-6 sm:grid-cols-2",
-    medium: "grid grid-cols-2 gap-4 sm:grid-cols-3",
-    small: "grid grid-cols-3 gap-3 sm:grid-cols-4",
-    list: "flex flex-col gap-2",
+    big: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+    medium: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+    small: "grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5",
+    list: "flex flex-col gap-1.5",
     "by-sector": "",
     "by-earnings": "",
   };
@@ -450,11 +450,11 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="px-4 py-12 md:px-8">
-        <div className="mx-auto max-w-5xl space-y-8">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">Earnings Dashboard</h1>
-            <p className="text-muted-foreground">Select a company to view detailed financial analysis</p>
+      <div className="px-4 py-4 md:px-8">
+        <div className="mx-auto max-w-6xl space-y-4">
+          <div className="text-center space-y-1">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">Earnings Dashboard</h1>
+            <p className="text-sm text-muted-foreground">Select a company to view detailed financial analysis</p>
             {lastUpdated && (
               <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <RefreshCw className={`h-3 w-3 ${pricesLoading ? "animate-spin" : ""}`} />
@@ -464,7 +464,7 @@ const Landing = () => {
           </div>
 
           {/* KPI Summary Cards */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <Card onClick={() => setOpenModal("positions")} className="cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-md transition-all duration-200">
               <CardContent className="p-4 flex items-center gap-3">
                 <div className="rounded-lg bg-primary/10 p-2"><BarChart3 className="h-4 w-4 text-primary" /></div>
