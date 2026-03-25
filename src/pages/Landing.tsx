@@ -234,10 +234,10 @@ const Landing = () => {
   };
 
   const gridClasses: Record<ViewMode, string> = {
-    big: "grid grid-cols-1 gap-6 sm:grid-cols-2",
-    medium: "grid grid-cols-2 gap-4 sm:grid-cols-3",
-    small: "grid grid-cols-3 gap-3 sm:grid-cols-4",
-    list: "flex flex-col gap-2",
+    big: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+    medium: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+    small: "grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5",
+    list: "flex flex-col gap-1.5",
     "by-sector": "",
     "by-earnings": "",
   };
