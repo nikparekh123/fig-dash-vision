@@ -91,7 +91,7 @@ export const nikeData: CompanyData = {
     { label: "DTC Revenue", value: "$4.7B", sub: "Down 12% YoY. Over-rotation to DTC under prior CEO being corrected — rebalancing to wholesale.", accent: "amber", monitor: true },
     { label: "Inventory", value: "$7.5B", sub: "Down from $8.5B peak — improving but still elevated. Cleaner inventory enables fewer markdowns.", accent: "blue" },
     { label: "Share Buybacks", value: "$4B+/yr", sub: "Continuing aggressive buyback program through the downturn — shrinking share count.", accent: "success" },
-    { label: "Brand Heat", value: "Cooling", sub: "Losing cultural relevance to New Balance, On, Hoka with Gen Z. Innovation pipeline is the fix.", accent: "danger", monitor: true },
+    { label: "Brand Heat", value: "Cooling", sub: "Losing cultural relevance to New Balance, On, Hoka with Gen Z. Innovation pipeline is the fix.", accent: "amber", monitor: true },
   ],
   marketPenetration: {
     tam: { percentage: "~12%", market: "$400B global athletic footwear & apparel", description: "Nike is the clear market leader in a $400B+ global athletic market, but share is being chipped away by insurgent brands." },
