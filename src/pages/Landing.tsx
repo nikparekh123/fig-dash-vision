@@ -187,9 +187,9 @@ const Landing = () => {
       small: "h-8 w-8 rounded-lg",
     };
     const titleClasses = {
-      big: "text-xl",
-      medium: "text-base",
-      small: "text-sm",
+    big: "text-base",
+      medium: "text-sm",
+      small: "text-xs",
     };
 
     return (
