@@ -177,9 +177,9 @@ const Landing = () => {
     }
 
     const sizeClasses = {
-      big: "p-8",
-      medium: "p-5",
-      small: "p-3",
+    big: "p-4",
+      medium: "p-3",
+      small: "p-2.5",
     };
     const logoClasses = {
       big: "h-16 w-16 rounded-2xl",
