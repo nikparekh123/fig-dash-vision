@@ -198,7 +198,7 @@ const Landing = () => {
         onClick={() => navigate(`/company/${c.slug}`)}
         className="group cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200"
       >
-        <CardContent className={`${sizeClasses[size]} flex flex-col items-center text-center space-y-${size === "small" ? "2" : size === "medium" ? "3" : "4"}`}>
+        <CardContent className={`${sizeClasses[size]} flex flex-col items-center text-center space-y-2`}>
           <div className="w-full flex justify-end -mb-1">
             <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${posSummary.bgColor} ${posSummary.color}`}>
               {posSummary.label}
