@@ -182,9 +182,9 @@ const Landing = () => {
       small: "p-2.5",
     };
     const logoClasses = {
-      big: "h-16 w-16 rounded-2xl",
-      medium: "h-12 w-12 rounded-xl",
-      small: "h-9 w-9 rounded-lg",
+    big: "h-12 w-12 rounded-xl",
+      medium: "h-10 w-10 rounded-xl",
+      small: "h-8 w-8 rounded-lg",
     };
     const titleClasses = {
       big: "text-xl",
