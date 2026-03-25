@@ -198,7 +198,7 @@ export const cignaData: CompanyData = {
   positions: {
     status: "live",
     positions: [
-      { type: "stock", description: "CI", quantity: 100, avgPrice: 270, currentPrice: 270 },
+      { type: "stock", description: "CI", quantity: 400, avgPrice: 270, currentPrice: 270 },
     ],
   },
 };

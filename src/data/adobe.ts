@@ -205,7 +205,7 @@ export const adobeData: CompanyData = {
   positions: {
     status: "live",
     positions: [
-      { type: "stock", description: "ADBE", quantity: 300, avgPrice: 282.11, currentPrice: 273.71 },
+      { type: "stock", description: "ADBE", quantity: 300, avgPrice: 282, currentPrice: 273.71 },
     ],
   },
   history: [
