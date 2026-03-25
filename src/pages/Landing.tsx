@@ -464,7 +464,7 @@ const Landing = () => {
           </div>
 
           {/* KPI Summary Cards */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <Card onClick={() => setOpenModal("positions")} className="cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-md transition-all duration-200">
               <CardContent className="p-4 flex items-center gap-3">
                 <div className="rounded-lg bg-primary/10 p-2"><BarChart3 className="h-4 w-4 text-primary" /></div>
