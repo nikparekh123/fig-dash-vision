@@ -1,50 +1,80 @@
 
 
-# Earnings Calendar Page
+# Pincode Login System & User Seeding
 
 ## Overview
-A new `/earnings` page with two views (Feed and Calendar), showing upcoming earnings dates sorted nearest-first. Includes search, logo display, and the ability for users to add custom companies. A nav link will be added to the Navbar.
+Replace the existing email/password auth with a 4-digit pincode system. Users enter a code, it's validated against a `team_members` table, and a magic-link session is created server-side. Four users are seeded with specific pincodes and roles.
 
 ## Database
 
-**New table: `custom_earnings`** — stores user-added companies with earnings dates.
-
+**New table: `team_members`**
 ```sql
-CREATE TABLE public.custom_earnings (
+CREATE TABLE public.team_members (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
-  company_name text NOT NULL,
-  ticker text NOT NULL,
-  earnings_date date NOT NULL,
+  name text NOT NULL,
+  initials text,
+  color text,
+  pincode text NOT NULL,
+  is_admin boolean DEFAULT false,
   created_at timestamptz DEFAULT now()
 );
-ALTER TABLE public.custom_earnings ENABLE ROW LEVEL SECURITY;
--- Users CRUD their own entries
-CREATE POLICY "Users manage own earnings" ON public.custom_earnings FOR ALL TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+ALTER TABLE public.team_members ENABLE ROW LEVEL SECURITY;
+-- Authenticated users can read team members (needed for display names, etc.)
+CREATE POLICY "Authenticated can read" ON public.team_members FOR SELECT TO authenticated USING (true);
 ```
 
 ## New Files
 
-### `src/pages/EarningsCalendar.tsx`
-- **Feed View**: Cards sorted by nearest earnings date, showing company logo, name, ticker, earnings date, and countdown (e.g. "in 12 days"). Includes search bar filtering by name/ticker. Uses same logo rendering pattern as Landing page.
-- **Calendar View**: Uses the existing `Calendar` component (react-day-picker) with earnings dates highlighted/marked. Clicking a date shows companies reporting that day.
-- Toggle between Feed/Calendar via ToggleGroup (same pattern as Landing view modes).
-- Merges built-in companies (from `companies` array using `earningsDate` field) with user-added companies from `custom_earnings` table.
-- "Add Company" button opens a Dialog form with fields: company name, ticker, earnings date (using date picker).
-- Auto-refreshes data from the database periodically.
+### `supabase/functions/pincode-login/index.ts`
+- CORS headers + OPTIONS handler
+- Accepts `{ pincode }`, validates it's a 4-char string
+- Uses service role admin client to query `team_members` by pincode
+- If no match → 401
+- Gets user email via `admin.auth.admin.getUserById()`
+- Generates magic link via `admin.auth.admin.generateLink({ type: "magiclink", email })`
+- Verifies OTP with anon client using `hashed_token`
+- Returns `{ session, user }`
+
+### `supabase/functions/seed-users/index.ts`
+- Creates 4 auth users via `admin.auth.admin.createUser()` with generated emails (e.g. `ary.larocca@internal.app`)
+- Inserts into `team_members` with name, initials, color, pincode, is_admin
+- Handles "user already exists" by looking up existing users and upserting
+- Users: Ary LaRocca (5499, admin), Radhouen Rahmouni (2026, member), Kushal Jain (0987, member), Nik Parekh (6617, admin)
+
+### `src/pages/Auth.tsx`
+- Full-screen centered layout with app heading + "Enter your 4-digit code" subtitle
+- 4-slot `InputOTP` component (digits only, maxLength 4)
+- On `onComplete`: calls `supabase.functions.invoke('pincode-login', { body: { pincode } })`
+- On success: calls `supabase.auth.setSession()` with returned tokens
+- Shows error inline, resets OTP input; shows "Signing in…" while loading
+- No submit button — auto-submits on 4th digit
 
 ## Modified Files
 
-### `src/components/Navbar.tsx`
-- Add an "Earnings" nav link next to "Dashboard" that navigates to `/earnings`.
+### `src/contexts/AuthContext.tsx`
+- No structural changes needed — already exposes `user`, `loading`, `signOut` and listens to auth state changes. Will continue to work as-is.
 
 ### `src/App.tsx`
-- Add protected route: `/earnings` → `<EarningsCalendar />`.
+- Replace `AuthPage` import with new `Auth` page
+- Update `/login` route to render `<Auth />`
+- Keep all existing route protection logic (ProtectedRoute, PublicRoute)
+- Remove `/set-password` and `/reset-password` routes (no longer needed)
 
-## Technical Details
-- Built-in companies use their `earningsDate` and `logo` fields directly from the static data.
-- Custom companies (from DB) won't have logos — show a generic placeholder or initials avatar.
-- Sorting: `new Date(earningsDate) - new Date()`, ascending. Past dates go to the bottom or are dimmed.
-- Search filters both built-in and custom companies by name or ticker (case-insensitive).
-- Calendar markers use colored dots on days that have earnings, with a popover or list below showing which companies.
+### `src/components/Navbar.tsx`
+- Update `useAuth` import if needed (still from `@/contexts/AuthContext`)
+
+## Files to Delete
+- `src/components/AuthPage.tsx` (replaced by `src/pages/Auth.tsx`)
+- `src/pages/SetPassword.tsx` (no longer needed)
+- `src/pages/ResetPassword.tsx` (no longer needed)
+
+## Execution Order
+1. Create `team_members` table migration
+2. Create `pincode-login` edge function
+3. Create `seed-users` edge function
+4. Create `src/pages/Auth.tsx`
+5. Update `src/App.tsx` — swap auth page, remove password routes
+6. Delete old auth components
+7. Run seed-users function to populate data
 
