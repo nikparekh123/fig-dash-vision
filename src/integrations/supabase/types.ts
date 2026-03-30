@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      custom_earnings: {
+        Row: {
+          company_name: string
+          created_at: string | null
+          earnings_date: string
+          id: string
+          ticker: string
+          user_id: string
+        }
+        Insert: {
+          company_name: string
+          created_at?: string | null
+          earnings_date: string
+          id?: string
+          ticker: string
+          user_id: string
+        }
+        Update: {
+          company_name?: string
+          created_at?: string | null
+          earnings_date?: string
+          id?: string
+          ticker?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

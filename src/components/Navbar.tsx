@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, ChevronRight, LayoutDashboard } from "lucide-react";
+import { LogOut, ChevronRight, LayoutDashboard, CalendarDays } from "lucide-react";
 
 interface NavbarProps {
   companyName?: string;
@@ -21,6 +21,13 @@ const Navbar = ({ companyName }: NavbarProps) => {
           >
             <LayoutDashboard className="h-4 w-4" />
             Dashboard
+          </button>
+          <button
+            onClick={() => navigate("/earnings")}
+            className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <CalendarDays className="h-3.5 w-3.5" />
+            Earnings
           </button>
           {companyName && (
             <>
