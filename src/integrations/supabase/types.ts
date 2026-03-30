@@ -68,6 +68,39 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          color: string | null
+          created_at: string | null
+          id: string
+          initials: string | null
+          is_admin: boolean | null
+          name: string
+          pincode: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string | null
+          id?: string
+          initials?: string | null
+          is_admin?: boolean | null
+          name: string
+          pincode: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string | null
+          id?: string
+          initials?: string | null
+          is_admin?: boolean | null
+          name?: string
+          pincode?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
