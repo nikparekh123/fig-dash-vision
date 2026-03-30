@@ -25,14 +25,22 @@ async function lookupEarnings(tickers: string[]): Promise<Record<string, { name:
       messages: [
         {
           role: 'system',
-          content: `You are a financial data assistant. Today's date is ${today}. When asked about earnings dates, return the NEXT UPCOMING earnings date (the nearest future date). If the next earnings date is not yet announced, estimate based on historical quarterly patterns. Always respond with valid JSON only, no markdown.`,
+          content: `You are a financial data assistant specializing in earnings dates. Today's date is ${today}. 
+
+CRITICAL RULES:
+- Return the EXACT officially announced next earnings date if available. Do NOT guess or approximate.
+- For major companies (FAANG, large caps), earnings dates are well-known. Use the CORRECT dates.
+- Common knowledge examples for reference: Meta (META) reports late April (around April 29-30), Microsoft (MSFT) reports late April (around April 29-30), Apple (AAPL) reports late April/early May.
+- If you are not 100% certain of the exact date, provide your best estimate but prefer later dates in the typical reporting window rather than earlier ones.
+- Companies typically report on the SAME weekday and similar week each quarter.
+- Always respond with valid JSON only, no markdown, no explanation.`,
         },
         {
           role: 'user',
-          content: `For each of these stock tickers, provide the company name and next upcoming earnings date: ${tickerList}
+          content: `For each of these stock tickers, provide the company name and the EXACT next upcoming earnings report date after ${today}. Be precise - do not round or approximate. Use officially announced dates when available: ${tickerList}
 
 Return a JSON object where each key is the ticker symbol and the value is an object with "name" (full company name) and "earningsDate" (in YYYY-MM-DD format). Example:
-{"AAPL": {"name": "Apple Inc.", "earningsDate": "2026-04-30"}}`,
+{"AAPL": {"name": "Apple Inc.", "earningsDate": "2026-05-01"}}`,
         },
       ],
       temperature: 0.1,
