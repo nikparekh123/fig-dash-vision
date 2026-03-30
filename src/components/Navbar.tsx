@@ -22,6 +22,13 @@ const Navbar = ({ companyName }: NavbarProps) => {
             <LayoutDashboard className="h-4 w-4" />
             Dashboard
           </button>
+          <button
+            onClick={() => navigate("/earnings")}
+            className="flex items-center gap-1.5 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <CalendarDays className="h-3.5 w-3.5" />
+            Earnings
+          </button>
           {companyName && (
             <>
               <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
