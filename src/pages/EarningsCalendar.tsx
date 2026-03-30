@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,11 +12,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { companies } from "@/data/companies";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,9 +23,10 @@ import {
   List,
   CalendarDays,
   Plus,
-  CalendarIcon,
   Clock,
   X,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
 
 interface EarningsEntry {
@@ -57,13 +53,18 @@ const EarningsCalendar = () => {
   >([]);
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<Date | undefined>();
 
+  // Live earnings dates from AI lookup
+  const [liveEarnings, setLiveEarnings] = useState<Record<string, { name: string; earningsDate: string }>>({});
+  const [loadingEarnings, setLoadingEarnings] = useState(false);
+
   // Add company form state
-  const [newName, setNewName] = useState("");
   const [newTicker, setNewTicker] = useState("");
-  const [newDate, setNewDate] = useState<Date | undefined>();
+  const [lookingUp, setLookingUp] = useState(false);
+  const [lookupResult, setLookupResult] = useState<{ name: string; earningsDate: string } | null>(null);
+  const [lookupError, setLookupError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch custom entries
+  // Fetch custom entries from DB
   const fetchCustomEntries = async () => {
     const { data } = await supabase
       .from("custom_earnings")
@@ -71,36 +72,69 @@ const EarningsCalendar = () => {
     if (data) setCustomEntries(data);
   };
 
+  // Fetch live earnings dates for all built-in companies
+  const fetchLiveEarnings = useCallback(async () => {
+    const allTickers = [
+      ...companies.map((c) => c.ticker),
+      ...customEntries.map((c) => c.ticker),
+    ];
+    if (allTickers.length === 0) return;
+
+    setLoadingEarnings(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("lookup-earnings", {
+        body: { tickers: allTickers },
+      });
+      if (!error && data?.success && data.results) {
+        setLiveEarnings(data.results);
+      }
+    } catch (e) {
+      console.error("Failed to fetch live earnings:", e);
+    } finally {
+      setLoadingEarnings(false);
+    }
+  }, [customEntries]);
+
   useEffect(() => {
     fetchCustomEntries();
-    const interval = setInterval(fetchCustomEntries, 60_000);
-    return () => clearInterval(interval);
   }, []);
 
-  // Merge built-in + custom
-  const allEntries: EarningsEntry[] = useMemo(() => {
-    const builtIn: EarningsEntry[] = companies.map((c) => ({
-      id: c.slug,
-      name: c.name,
-      ticker: c.ticker,
-      earningsDate: new Date(c.earningsDate),
-      logo: c.logo,
-      color: c.color,
-      slug: c.slug,
-      isCustom: false,
-    }));
+  useEffect(() => {
+    fetchLiveEarnings();
+  }, [fetchLiveEarnings]);
 
-    const custom: EarningsEntry[] = customEntries.map((c) => ({
-      id: c.id,
-      name: c.company_name,
-      ticker: c.ticker,
-      earningsDate: new Date(c.earnings_date + "T00:00:00"),
-      color: "#6366f1",
-      isCustom: true,
-    }));
+  // Merge built-in + custom, using live dates when available
+  const allEntries: EarningsEntry[] = useMemo(() => {
+    const builtIn: EarningsEntry[] = companies.map((c) => {
+      const live = liveEarnings[c.ticker];
+      const dateStr = live?.earningsDate || c.earningsDate;
+      return {
+        id: c.slug,
+        name: c.name,
+        ticker: c.ticker,
+        earningsDate: new Date(dateStr),
+        logo: c.logo,
+        color: c.color,
+        slug: c.slug,
+        isCustom: false,
+      };
+    });
+
+    const custom: EarningsEntry[] = customEntries.map((c) => {
+      const live = liveEarnings[c.ticker];
+      const dateStr = live?.earningsDate || c.earnings_date;
+      return {
+        id: c.id,
+        name: live?.name || c.company_name,
+        ticker: c.ticker,
+        earningsDate: new Date(dateStr.includes("T") ? dateStr : dateStr + "T00:00:00"),
+        color: "#6366f1",
+        isCustom: true,
+      };
+    });
 
     return [...builtIn, ...custom];
-  }, [customEntries]);
+  }, [customEntries, liveEarnings]);
 
   // Filter & sort
   const filteredEntries = useMemo(() => {
@@ -111,7 +145,6 @@ const EarningsCalendar = () => {
     );
 
     const now = new Date();
-    // Sort: future dates ascending, then past dates descending
     return filtered.sort((a, b) => {
       const aDiff = differenceInDays(a.earningsDate, now);
       const bDiff = differenceInDays(b.earningsDate, now);
@@ -124,28 +157,50 @@ const EarningsCalendar = () => {
     });
   }, [allEntries, search]);
 
-  // Calendar: dates with earnings
-  const earningsDates = useMemo(() => {
-    return allEntries.map((e) => e.earningsDate);
-  }, [allEntries]);
+  const earningsDates = useMemo(() => allEntries.map((e) => e.earningsDate), [allEntries]);
 
   const companiesOnDate = useMemo(() => {
     if (!selectedCalendarDate) return [];
     return allEntries.filter((e) => isSameDay(e.earningsDate, selectedCalendarDate));
   }, [allEntries, selectedCalendarDate]);
 
+  // Lookup ticker for add dialog
+  const handleLookupTicker = async () => {
+    if (!newTicker.trim()) return;
+    setLookingUp(true);
+    setLookupResult(null);
+    setLookupError("");
+    try {
+      const { data, error } = await supabase.functions.invoke("lookup-earnings", {
+        body: { tickers: [newTicker.trim().toUpperCase()] },
+      });
+      if (error) throw error;
+      const ticker = newTicker.trim().toUpperCase();
+      const result = data?.results?.[ticker];
+      if (result) {
+        setLookupResult(result);
+      } else {
+        setLookupError("Could not find earnings data for this ticker.");
+      }
+    } catch {
+      setLookupError("Failed to look up ticker. Try again.");
+    } finally {
+      setLookingUp(false);
+    }
+  };
+
   const handleAddCompany = async () => {
-    if (!newName || !newTicker || !newDate || !user) return;
+    if (!lookupResult || !user) return;
     setSubmitting(true);
+    const ticker = newTicker.trim().toUpperCase();
     await supabase.from("custom_earnings").insert({
       user_id: user.id,
-      company_name: newName.trim(),
-      ticker: newTicker.trim().toUpperCase(),
-      earnings_date: format(newDate, "yyyy-MM-dd"),
+      company_name: lookupResult.name,
+      ticker,
+      earnings_date: lookupResult.earningsDate,
     });
-    setNewName("");
     setNewTicker("");
-    setNewDate(undefined);
+    setLookupResult(null);
     setAddDialogOpen(false);
     setSubmitting(false);
     fetchCustomEntries();
@@ -174,11 +229,31 @@ const EarningsCalendar = () => {
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-8 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Earnings Calendar</h1>
-          <Button size="sm" onClick={() => setAddDialogOpen(true)} className="gap-1.5">
-            <Plus className="h-3.5 w-3.5" />
-            Add Company
-          </Button>
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-bold text-foreground">Earnings Calendar</h1>
+            {loadingEarnings && (
+              <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                Refreshing dates...
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={fetchLiveEarnings}
+              disabled={loadingEarnings}
+              className="gap-1.5"
+            >
+              <RefreshCw className={cn("h-3.5 w-3.5", loadingEarnings && "animate-spin")} />
+              Refresh
+            </Button>
+            <Button size="sm" onClick={() => setAddDialogOpen(true)} className="gap-1.5">
+              <Plus className="h-3.5 w-3.5" />
+              Add Company
+            </Button>
+          </div>
         </div>
 
         {/* Controls */}
@@ -293,12 +368,9 @@ const EarningsCalendar = () => {
                   selected={selectedCalendarDate}
                   onSelect={setSelectedCalendarDate}
                   className={cn("p-3 pointer-events-auto")}
-                  modifiers={{
-                    earnings: earningsDates,
-                  }}
+                  modifiers={{ earnings: earningsDates }}
                   modifiersClassNames={{
-                    earnings:
-                      "bg-primary/20 text-primary font-bold hover:bg-primary/30",
+                    earnings: "bg-primary/20 text-primary font-bold hover:bg-primary/30",
                   }}
                 />
               </CardContent>
@@ -326,11 +398,7 @@ const EarningsCalendar = () => {
                 >
                   {entry.logo ? (
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/90 p-1">
-                      <img
-                        src={entry.logo}
-                        alt={entry.name}
-                        className="h-full w-full object-contain"
-                      />
+                      <img src={entry.logo} alt={entry.name} className="h-full w-full object-contain" />
                     </div>
                   ) : (
                     <div
@@ -341,9 +409,7 @@ const EarningsCalendar = () => {
                     </div>
                   )}
                   <div>
-                    <span className="font-medium text-foreground text-sm">
-                      {entry.name}
-                    </span>
+                    <span className="font-medium text-foreground text-sm">{entry.name}</span>
                     <p className="text-xs text-muted-foreground">{entry.ticker}</p>
                   </div>
                 </div>
@@ -353,62 +419,67 @@ const EarningsCalendar = () => {
         )}
       </div>
 
-      {/* Add Company Dialog */}
-      <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
+      {/* Add Company Dialog — ticker only */}
+      <Dialog open={addDialogOpen} onOpenChange={(open) => {
+        setAddDialogOpen(open);
+        if (!open) {
+          setNewTicker("");
+          setLookupResult(null);
+          setLookupError("");
+        }
+      }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add Earnings Date</DialogTitle>
+            <DialogTitle>Add Company</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Company Name</label>
-              <Input
-                placeholder="e.g. Apple Inc."
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-              />
+              <label className="text-sm font-medium text-foreground">Ticker Symbol</label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="e.g. AAPL"
+                  value={newTicker}
+                  onChange={(e) => {
+                    setNewTicker(e.target.value.toUpperCase());
+                    setLookupResult(null);
+                    setLookupError("");
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handleLookupTicker()}
+                  className="flex-1"
+                />
+                <Button
+                  onClick={handleLookupTicker}
+                  disabled={!newTicker.trim() || lookingUp}
+                  variant="secondary"
+                >
+                  {lookingUp ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                </Button>
+              </div>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Ticker</label>
-              <Input
-                placeholder="e.g. AAPL"
-                value={newTicker}
-                onChange={(e) => setNewTicker(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Earnings Date</label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !newDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {newDate ? format(newDate, "PPP") : "Pick a date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={newDate}
-                    onSelect={setNewDate}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+
+            {lookupError && (
+              <p className="text-sm text-destructive">{lookupError}</p>
+            )}
+
+            {lookupResult && (
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-foreground">{lookupResult.name}</span>
+                  <span className="text-xs text-muted-foreground">{newTicker.trim().toUpperCase()}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  Next earnings: {format(new Date(lookupResult.earningsDate), "MMM d, yyyy")}
+                </div>
+              </div>
+            )}
           </div>
           <DialogFooter>
             <Button
               onClick={handleAddCompany}
-              disabled={!newName || !newTicker || !newDate || submitting}
+              disabled={!lookupResult || submitting}
             >
-              {submitting ? "Adding..." : "Add"}
+              {submitting ? "Adding..." : "Add to Calendar"}
             </Button>
           </DialogFooter>
         </DialogContent>
