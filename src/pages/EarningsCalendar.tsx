@@ -1,9 +1,7 @@
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Dialog,
@@ -16,7 +14,19 @@ import { companies } from "@/data/companies";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import { format, differenceInDays, isSameDay } from "date-fns";
+import {
+  format,
+  differenceInDays,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  addDays,
+  addMonths,
+  subMonths,
+  isToday,
+  isSameMonth,
+} from "date-fns";
 import { cn } from "@/lib/utils";
 import {
   Search,
@@ -27,6 +37,8 @@ import {
   X,
   Loader2,
   RefreshCw,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 interface EarningsEntry {
@@ -42,6 +54,8 @@ interface EarningsEntry {
 
 type ViewMode = "feed" | "calendar";
 
+const WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
 const EarningsCalendar = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -51,20 +65,17 @@ const EarningsCalendar = () => {
   const [customEntries, setCustomEntries] = useState<
     { id: string; company_name: string; ticker: string; earnings_date: string }[]
   >([]);
-  const [selectedCalendarDate, setSelectedCalendarDate] = useState<Date | undefined>();
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
 
-  // Live earnings dates from AI lookup
   const [liveEarnings, setLiveEarnings] = useState<Record<string, { name: string; earningsDate: string }>>({});
   const [loadingEarnings, setLoadingEarnings] = useState(false);
 
-  // Add company form state
   const [newTicker, setNewTicker] = useState("");
   const [lookingUp, setLookingUp] = useState(false);
   const [lookupResult, setLookupResult] = useState<{ name: string; earningsDate: string } | null>(null);
   const [lookupError, setLookupError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch custom entries from DB
   const fetchCustomEntries = async () => {
     const { data } = await supabase
       .from("custom_earnings")
@@ -72,7 +83,6 @@ const EarningsCalendar = () => {
     if (data) setCustomEntries(data);
   };
 
-  // Fetch live earnings dates for all built-in companies
   const fetchLiveEarnings = useCallback(async () => {
     const allTickers = [
       ...companies.map((c) => c.ticker),
@@ -95,28 +105,17 @@ const EarningsCalendar = () => {
     }
   }, [customEntries]);
 
-  useEffect(() => {
-    fetchCustomEntries();
-  }, []);
+  useEffect(() => { fetchCustomEntries(); }, []);
+  useEffect(() => { fetchLiveEarnings(); }, [fetchLiveEarnings]);
 
-  useEffect(() => {
-    fetchLiveEarnings();
-  }, [fetchLiveEarnings]);
-
-  // Merge built-in + custom, using live dates when available
   const allEntries: EarningsEntry[] = useMemo(() => {
     const builtIn: EarningsEntry[] = companies.map((c) => {
       const live = liveEarnings[c.ticker];
       const dateStr = live?.earningsDate || c.earningsDate;
       return {
-        id: c.slug,
-        name: c.name,
-        ticker: c.ticker,
+        id: c.slug, name: c.name, ticker: c.ticker,
         earningsDate: new Date(dateStr),
-        logo: c.logo,
-        color: c.color,
-        slug: c.slug,
-        isCustom: false,
+        logo: c.logo, color: c.color, slug: c.slug, isCustom: false,
       };
     });
 
@@ -124,26 +123,20 @@ const EarningsCalendar = () => {
       const live = liveEarnings[c.ticker];
       const dateStr = live?.earningsDate || c.earnings_date;
       return {
-        id: c.id,
-        name: live?.name || c.company_name,
-        ticker: c.ticker,
+        id: c.id, name: live?.name || c.company_name, ticker: c.ticker,
         earningsDate: new Date(dateStr.includes("T") ? dateStr : dateStr + "T00:00:00"),
-        color: "#6366f1",
-        isCustom: true,
+        color: "#6366f1", isCustom: true,
       };
     });
 
     return [...builtIn, ...custom];
   }, [customEntries, liveEarnings]);
 
-  // Filter & sort
   const filteredEntries = useMemo(() => {
     const q = search.toLowerCase();
     const filtered = allEntries.filter(
-      (e) =>
-        e.name.toLowerCase().includes(q) || e.ticker.toLowerCase().includes(q)
+      (e) => e.name.toLowerCase().includes(q) || e.ticker.toLowerCase().includes(q)
     );
-
     const now = new Date();
     return filtered.sort((a, b) => {
       const aDiff = differenceInDays(a.earningsDate, now);
@@ -157,14 +150,38 @@ const EarningsCalendar = () => {
     });
   }, [allEntries, search]);
 
-  const earningsDates = useMemo(() => allEntries.map((e) => e.earningsDate), [allEntries]);
+  // Calendar grid
+  const calendarWeeks = useMemo(() => {
+    const monthStart = startOfMonth(calendarMonth);
+    const monthEnd = endOfMonth(calendarMonth);
+    const gridStart = startOfWeek(monthStart);
+    const gridEnd = endOfWeek(monthEnd);
 
-  const companiesOnDate = useMemo(() => {
-    if (!selectedCalendarDate) return [];
-    return allEntries.filter((e) => isSameDay(e.earningsDate, selectedCalendarDate));
-  }, [allEntries, selectedCalendarDate]);
+    const weeks: Date[][] = [];
+    let current = gridStart;
+    let week: Date[] = [];
 
-  // Lookup ticker for add dialog
+    while (current <= gridEnd) {
+      week.push(current);
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+      current = addDays(current, 1);
+    }
+    return weeks;
+  }, [calendarMonth]);
+
+  const entriesByDate = useMemo(() => {
+    const map: Record<string, EarningsEntry[]> = {};
+    allEntries.forEach((e) => {
+      const key = format(e.earningsDate, "yyyy-MM-dd");
+      if (!map[key]) map[key] = [];
+      map[key].push(e);
+    });
+    return map;
+  }, [allEntries]);
+
   const handleLookupTicker = async () => {
     if (!newTicker.trim()) return;
     setLookingUp(true);
@@ -223,10 +240,10 @@ const EarningsCalendar = () => {
   const isPast = (date: Date) => differenceInDays(date, new Date()) < 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navbar companyName="Earnings Calendar" />
 
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-8 space-y-4">
+      <div className="w-full px-4 py-4 md:px-6 space-y-4 flex-1 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -239,13 +256,7 @@ const EarningsCalendar = () => {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={fetchLiveEarnings}
-              disabled={loadingEarnings}
-              className="gap-1.5"
-            >
+            <Button variant="ghost" size="sm" onClick={fetchLiveEarnings} disabled={loadingEarnings} className="gap-1.5">
               <RefreshCw className={cn("h-3.5 w-3.5", loadingEarnings && "animate-spin")} />
               Refresh
             </Button>
@@ -260,25 +271,11 @@ const EarningsCalendar = () => {
         <div className="flex items-center gap-3 flex-wrap">
           <div className="relative flex-1 min-w-[200px] max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <Input
-              placeholder="Search company or ticker..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 h-9 text-sm"
-            />
+            <Input placeholder="Search company or ticker..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9 h-9 text-sm" />
           </div>
-          <ToggleGroup
-            type="single"
-            value={viewMode}
-            onValueChange={(v) => v && setViewMode(v as ViewMode)}
-            size="sm"
-          >
-            <ToggleGroupItem value="feed" aria-label="Feed view">
-              <List className="h-4 w-4" />
-            </ToggleGroupItem>
-            <ToggleGroupItem value="calendar" aria-label="Calendar view">
-              <CalendarDays className="h-4 w-4" />
-            </ToggleGroupItem>
+          <ToggleGroup type="single" value={viewMode} onValueChange={(v) => v && setViewMode(v as ViewMode)} size="sm">
+            <ToggleGroupItem value="feed" aria-label="Feed view"><List className="h-4 w-4" /></ToggleGroupItem>
+            <ToggleGroupItem value="calendar" aria-label="Calendar view"><CalendarDays className="h-4 w-4" /></ToggleGroupItem>
           </ToggleGroup>
         </div>
 
@@ -297,53 +294,26 @@ const EarningsCalendar = () => {
               >
                 {entry.logo ? (
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/90 p-1.5">
-                    <img
-                      src={entry.logo}
-                      alt={`${entry.name} logo`}
-                      className="h-full w-full object-contain"
-                    />
+                    <img src={entry.logo} alt={`${entry.name} logo`} className="h-full w-full object-contain" />
                   </div>
                 ) : (
-                  <div
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white"
-                    style={{ backgroundColor: entry.color }}
-                  >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg font-bold text-white" style={{ backgroundColor: entry.color }}>
                     {entry.name.charAt(0)}
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {entry.name}
-                    </span>
+                    <span className="font-semibold text-foreground group-hover:text-primary transition-colors">{entry.name}</span>
                     <span className="text-xs text-muted-foreground">{entry.ticker}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground/70">
-                    {format(entry.earningsDate, "MMM d, yyyy")}
-                  </p>
+                  <p className="text-xs text-muted-foreground/70">{format(entry.earningsDate, "MMM d, yyyy")}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      "text-xs font-medium px-2.5 py-0.5 rounded-full border",
-                      isPast(entry.earningsDate)
-                        ? "bg-muted/50 border-border text-muted-foreground"
-                        : "bg-primary/10 border-primary/20 text-primary"
-                    )}
-                  >
-                    <Clock className="h-3 w-3 inline mr-1" />
-                    {getCountdown(entry.earningsDate)}
+                  <span className={cn("text-xs font-medium px-2.5 py-0.5 rounded-full border", isPast(entry.earningsDate) ? "bg-muted/50 border-border text-muted-foreground" : "bg-primary/10 border-primary/20 text-primary")}>
+                    <Clock className="h-3 w-3 inline mr-1" />{getCountdown(entry.earningsDate)}
                   </span>
                   {entry.isCustom && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteCustom(entry.id);
-                      }}
-                    >
+                    <Button variant="ghost" size="icon" className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => { e.stopPropagation(); handleDeleteCustom(entry.id); }}>
                       <X className="h-3.5 w-3.5" />
                     </Button>
                   )}
@@ -351,82 +321,103 @@ const EarningsCalendar = () => {
               </div>
             ))}
             {filteredEntries.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-12">
-                No earnings found
-              </p>
+              <p className="text-sm text-muted-foreground text-center py-12">No earnings found</p>
             )}
           </div>
         )}
 
-        {/* Calendar View */}
+        {/* Calendar View — Full-screen Google Calendar style */}
         {viewMode === "calendar" && (
-          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6">
-            <Card className="border-border/50">
-              <CardContent className="p-4">
-                <Calendar
-                  mode="single"
-                  selected={selectedCalendarDate}
-                  onSelect={setSelectedCalendarDate}
-                  className={cn("p-3 pointer-events-auto")}
-                  modifiers={{ earnings: earningsDates }}
-                  modifiersClassNames={{
-                    earnings: "bg-primary/20 text-primary font-bold hover:bg-primary/30",
-                  }}
-                />
-              </CardContent>
-            </Card>
+          <div className="flex-1 flex flex-col min-h-0">
+            {/* Month navigation */}
+            <div className="flex items-center gap-3 mb-3">
+              <Button variant="outline" size="sm" onClick={() => setCalendarMonth(new Date())} className="text-xs">
+                Today
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setCalendarMonth((m) => subMonths(m, 1))}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setCalendarMonth((m) => addMonths(m, 1))}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <h2 className="text-lg font-semibold text-foreground">{format(calendarMonth, "MMMM yyyy")}</h2>
+            </div>
 
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-muted-foreground">
-                {selectedCalendarDate
-                  ? format(selectedCalendarDate, "MMMM d, yyyy")
-                  : "Select a date"}
-              </h3>
-              {selectedCalendarDate && companiesOnDate.length === 0 && (
-                <p className="text-sm text-muted-foreground py-4">
-                  No earnings on this date
-                </p>
-              )}
-              {companiesOnDate.map((entry) => (
-                <div
-                  key={entry.id}
-                  className={cn(
-                    "flex items-center gap-3 p-3 rounded-lg border border-border/50 bg-card/80",
-                    entry.slug && "cursor-pointer hover:border-primary/40"
-                  )}
-                  onClick={() => entry.slug && navigate(`/company/${entry.slug}`)}
-                >
-                  {entry.logo ? (
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/90 p-1">
-                      <img src={entry.logo} alt={entry.name} className="h-full w-full object-contain" />
-                    </div>
-                  ) : (
-                    <div
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold text-white"
-                      style={{ backgroundColor: entry.color }}
-                    >
-                      {entry.name.charAt(0)}
-                    </div>
-                  )}
-                  <div>
-                    <span className="font-medium text-foreground text-sm">{entry.name}</span>
-                    <p className="text-xs text-muted-foreground">{entry.ticker}</p>
-                  </div>
+            {/* Weekday headers */}
+            <div className="grid grid-cols-7 border-b border-border">
+              {WEEKDAYS.map((day) => (
+                <div key={day} className="py-2 text-center text-[11px] font-medium text-muted-foreground tracking-wide">
+                  {day}
                 </div>
               ))}
+            </div>
+
+            {/* Calendar grid */}
+            <div className="grid grid-cols-7 flex-1 border-l border-border">
+              {calendarWeeks.flat().map((day, i) => {
+                const dateKey = format(day, "yyyy-MM-dd");
+                const dayEntries = entriesByDate[dateKey] || [];
+                const inMonth = isSameMonth(day, calendarMonth);
+                const isTodayDate = isToday(day);
+                const maxVisible = 3;
+                const overflow = dayEntries.length - maxVisible;
+
+                return (
+                  <div
+                    key={i}
+                    className={cn(
+                      "border-r border-b border-border p-1 min-h-[100px] flex flex-col",
+                      !inMonth && "bg-muted/20"
+                    )}
+                  >
+                    <div className="flex items-start px-1 mb-0.5">
+                      <span
+                        className={cn(
+                          "text-xs leading-6",
+                          !inMonth && "text-muted-foreground/40",
+                          inMonth && "text-foreground font-medium",
+                          isTodayDate && "bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-[11px] font-bold"
+                        )}
+                      >
+                        {format(day, "d")}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-[2px] flex-1 overflow-hidden">
+                      {dayEntries.slice(0, maxVisible).map((entry) => (
+                        <div
+                          key={entry.id}
+                          className="text-[11px] leading-tight px-1.5 py-[3px] rounded-sm truncate transition-opacity hover:opacity-80 cursor-pointer"
+                          style={{
+                            backgroundColor: entry.color + "20",
+                            color: entry.color,
+                            borderLeft: `3px solid ${entry.color}`,
+                          }}
+                          onClick={() => entry.slug && navigate(`/company/${entry.slug}`)}
+                          title={`${entry.name} (${entry.ticker}) — Earnings`}
+                        >
+                          <span className="font-medium">{entry.ticker}</span>{" "}
+                          <span className="opacity-80">{entry.name}</span>
+                        </div>
+                      ))}
+                      {overflow > 0 && (
+                        <span className="text-[10px] text-muted-foreground px-1.5 font-medium">
+                          +{overflow} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
       </div>
 
-      {/* Add Company Dialog — ticker only */}
+      {/* Add Company Dialog */}
       <Dialog open={addDialogOpen} onOpenChange={(open) => {
         setAddDialogOpen(open);
-        if (!open) {
-          setNewTicker("");
-          setLookupResult(null);
-          setLookupError("");
-        }
+        if (!open) { setNewTicker(""); setLookupResult(null); setLookupError(""); }
       }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -439,27 +430,17 @@ const EarningsCalendar = () => {
                 <Input
                   placeholder="e.g. AAPL"
                   value={newTicker}
-                  onChange={(e) => {
-                    setNewTicker(e.target.value.toUpperCase());
-                    setLookupResult(null);
-                    setLookupError("");
-                  }}
+                  onChange={(e) => { setNewTicker(e.target.value.toUpperCase()); setLookupResult(null); setLookupError(""); }}
                   onKeyDown={(e) => e.key === "Enter" && handleLookupTicker()}
                   className="flex-1"
                 />
-                <Button
-                  onClick={handleLookupTicker}
-                  disabled={!newTicker.trim() || lookingUp}
-                  variant="secondary"
-                >
+                <Button onClick={handleLookupTicker} disabled={!newTicker.trim() || lookingUp} variant="secondary">
                   {lookingUp ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
 
-            {lookupError && (
-              <p className="text-sm text-destructive">{lookupError}</p>
-            )}
+            {lookupError && <p className="text-sm text-destructive">{lookupError}</p>}
 
             {lookupResult && (
               <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-2">
@@ -475,10 +456,7 @@ const EarningsCalendar = () => {
             )}
           </div>
           <DialogFooter>
-            <Button
-              onClick={handleAddCompany}
-              disabled={!lookupResult || submitting}
-            >
+            <Button onClick={handleAddCompany} disabled={!lookupResult || submitting}>
               {submitting ? "Adding..." : "Add to Calendar"}
             </Button>
           </DialogFooter>
