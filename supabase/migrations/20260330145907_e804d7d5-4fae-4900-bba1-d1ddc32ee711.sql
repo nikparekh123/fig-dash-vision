@@ -1,0 +1,1 @@
+ALTER TABLE public.team_members ADD CONSTRAINT team_members_user_id_key UNIQUE (user_id);
