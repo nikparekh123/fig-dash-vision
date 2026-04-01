@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      company_events: {
+        Row: {
+          company_name: string
+          company_slug: string
+          created_at: string | null
+          event_date: string
+          event_name: string
+          id: string
+          ticker: string
+          user_id: string
+        }
+        Insert: {
+          company_name: string
+          company_slug: string
+          created_at?: string | null
+          event_date: string
+          event_name: string
+          id?: string
+          ticker: string
+          user_id: string
+        }
+        Update: {
+          company_name?: string
+          company_slug?: string
+          created_at?: string | null
+          event_date?: string
+          event_name?: string
+          id?: string
+          ticker?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       custom_earnings: {
         Row: {
           company_name: string
