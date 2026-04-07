@@ -14,7 +14,7 @@ const iconMap = [
 ];
 
 const KpiCard = ({ title, value, change, positive, icon, subtitle }: KpiCardProps) => (
-  <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:border-border transition-colors">
+  <Card className="bg-card hover:bg-card/80 transition-colors">
     <CardContent className="p-5">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
