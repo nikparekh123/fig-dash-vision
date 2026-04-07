@@ -309,7 +309,7 @@ const EarningsCalendar = () => {
                 <button
                   key={c.slug}
                   onClick={() => openAddDialog(c.slug)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all text-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card hover:bg-secondary transition-all text-sm"
                 >
                   {c.logo ? (
                     <img
@@ -340,9 +340,9 @@ const EarningsCalendar = () => {
               <div
                 key={entry.id}
                 className={cn(
-                  "group flex items-center gap-4 p-3 rounded-lg border border-border/50 bg-card/80 backdrop-blur-sm transition-all duration-200",
+                  "group flex items-center gap-4 p-3 rounded-xl bg-card transition-all duration-200",
                   entry.slug &&
-                    "cursor-pointer hover:border-primary/40 hover:shadow-md",
+                    "cursor-pointer hover:bg-secondary",
                   isPast(entry.event_date) && "opacity-50"
                 )}
                 onClick={() =>
@@ -381,10 +381,10 @@ const EarningsCalendar = () => {
                 <div className="flex items-center gap-2">
                   <span
                     className={cn(
-                      "text-xs font-medium px-2.5 py-0.5 rounded-full border",
+                       "text-xs font-medium px-2.5 py-0.5 rounded-full",
                       isPast(entry.event_date)
-                        ? "bg-muted/50 border-border text-muted-foreground"
-                        : "bg-primary/10 border-primary/20 text-primary"
+                        ? "bg-muted/50 text-muted-foreground"
+                        : "bg-primary/10 text-primary"
                     )}
                   >
                     <Clock className="h-3 w-3 inline mr-1" />
@@ -648,10 +648,10 @@ const EarningsCalendar = () => {
                       type="button"
                       onClick={() => setEventName(s)}
                       className={cn(
-                        "text-xs px-2 py-1 rounded-full border transition-colors",
+                       "text-xs px-2 py-1 rounded-full transition-colors",
                         eventName === s
-                          ? "bg-primary/10 border-primary/30 text-primary"
-                          : "border-border text-muted-foreground hover:border-primary/20"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-secondary text-muted-foreground hover:text-foreground"
                       )}
                     >
                       {s}
@@ -666,7 +666,7 @@ const EarningsCalendar = () => {
                       key={s}
                       type="button"
                       onClick={() => setEventName(s)}
-                      className="text-xs px-2 py-1 rounded-full border border-border text-muted-foreground hover:border-primary/20 transition-colors"
+                      className="text-xs px-2 py-1 rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {s}
                     </button>
