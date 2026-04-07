@@ -43,14 +43,14 @@ const OwnershipStructure = ({ data }: { data: OwnershipData }) => {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <Card className="border-border/50 bg-card">
+        <Card className="bg-card">
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Top {shareholders.length} Ownership</p>
             <p className="text-xl font-bold text-foreground">{topOwners.toFixed(1)}%</p>
           </CardContent>
         </Card>
         {summaryCards.map((c) => (
-          <Card key={c.label} className="border-border/50 bg-card">
+          <Card key={c.label} className="bg-card">
             <CardContent className="p-4">
               <p className="text-xs text-muted-foreground">{c.label}</p>
               <p className="text-xl font-bold text-foreground">{c.value}</p>
@@ -60,7 +60,7 @@ const OwnershipStructure = ({ data }: { data: OwnershipData }) => {
         ))}
       </div>
 
-      <Card className="border-border/50 bg-card">
+      <Card className="bg-card">
         <CardContent className="p-4">
           <div className="mb-4 flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">Shareholder Breakdown</p>
@@ -83,9 +83,9 @@ const OwnershipStructure = ({ data }: { data: OwnershipData }) => {
             </div>
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={shareholders} layout="vertical" margin={{ left: 0, right: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(217, 32%, 17%)" horizontal={false} />
-                <XAxis type="number" tickFormatter={(v) => formatValue(v, metric)} tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 10 }} />
-                <YAxis type="category" dataKey="name" width={110} tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 10 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(170, 40%, 16%)" horizontal={false} />
+                <XAxis type="number" tickFormatter={(v) => formatValue(v, metric)} tick={{ fill: "hsl(165, 25%, 38%)", fontSize: 10 }} />
+                <YAxis type="category" dataKey="name" width={110} tick={{ fill: "hsl(165, 25%, 38%)", fontSize: 10 }} />
                 <Tooltip content={<CustomTooltip metric={metric} />} />
                 <Bar dataKey={metric} radius={[0, 4, 4, 0]}>
                   {shareholders.map((_, i) => (<Cell key={i} fill={COLORS[i % COLORS.length]} />))}
@@ -104,7 +104,7 @@ const OwnershipStructure = ({ data }: { data: OwnershipData }) => {
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <Card className="border-border/50 bg-card">
+          <Card className="bg-card">
             <CardContent className="p-4">
               <Table>
                 <TableHeader>
