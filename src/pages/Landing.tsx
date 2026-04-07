@@ -518,7 +518,7 @@ const Landing = () => {
                   placeholder="Search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-8 pr-7 h-9 text-sm bg-card/80 border-border/50"
+                  className="pl-8 pr-7 h-9 text-sm bg-card border-border/30"
                 />
                 {search && (
                   <button onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
@@ -529,7 +529,7 @@ const Landing = () => {
 
               {/* Industry Filter */}
               <Select value={industryFilter} onValueChange={setIndustryFilter}>
-                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="Industry" />
                 </SelectTrigger>
                 <SelectContent>
@@ -542,7 +542,7 @@ const Landing = () => {
 
               {/* Sector Filter */}
               <Select value={sectorFilter} onValueChange={setSectorFilter}>
-                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="Sector" />
                 </SelectTrigger>
                 <SelectContent>
@@ -555,7 +555,7 @@ const Landing = () => {
 
               {/* Earnings Filter */}
               <Select value={earningsFilter} onValueChange={setEarningsFilter}>
-                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="Earnings" />
                 </SelectTrigger>
                 <SelectContent>
@@ -568,7 +568,7 @@ const Landing = () => {
 
               {/* P&L Filter */}
               <Select value={pnlFilter} onValueChange={setPnlFilter}>
-                <SelectTrigger className="w-auto min-w-[100px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[100px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="P&L" />
                 </SelectTrigger>
                 <SelectContent>
