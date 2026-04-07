@@ -15,14 +15,14 @@ const sentimentColor = {
 };
 
 const AnalystSection = ({ data }: { data: AnalystData }) => (
-  <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+  <Card className="bg-card">
     <CardHeader className="pb-2">
       <CardTitle className="text-sm font-semibold text-foreground">Analyst Views</CardTitle>
     </CardHeader>
     <CardContent className="space-y-3">
       <div className="space-y-2">
         {data.analysts.map((a) => (
-          <div key={a.firm} className="flex items-center justify-between rounded-lg bg-secondary/40 px-3 py-2">
+          <div key={a.firm} className="flex items-center justify-between rounded-xl bg-secondary/40 px-3 py-2">
             <div className="flex items-center gap-2">
               {sentimentIcon[a.sentiment]}
               <span className="text-sm font-medium text-foreground">{a.firm}</span>
@@ -35,7 +35,7 @@ const AnalystSection = ({ data }: { data: AnalystData }) => (
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between rounded-lg border border-chart-blue/20 bg-chart-blue/5 px-3 py-2.5">
+      <div className="flex items-center justify-between rounded-xl bg-chart-blue/5 px-3 py-2.5">
         <div>
           <p className="text-xs text-muted-foreground">Mean Analyst Target</p>
           <p className="text-lg font-bold text-foreground">{data.meanTarget}</p>

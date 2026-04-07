@@ -11,7 +11,7 @@ const iconMap = {
 const GuidanceSection = ({ data }: { data: GuidanceData }) => (
   <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
     {data.items.map((item) => (
-      <Card key={item.title} className={`border-border/50 ${item.accent === "success" ? "bg-success/5 border-success/20" : "bg-card/80"} backdrop-blur-sm`}>
+      <Card key={item.title} className={item.accent === "success" ? "bg-success/5" : "bg-card"}>
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             {iconMap[item.accent]}

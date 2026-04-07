@@ -92,7 +92,7 @@ const CompanyDashboard = () => {
               {company.history && company.history.length > 0 && (
                 <button
                   onClick={() => setHistoryOpen(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-border/50 bg-card/80 px-3 py-1.5 text-xs text-muted-foreground hover:border-primary/40 hover:text-foreground transition-all"
+                  className="flex items-center gap-1.5 rounded-xl bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-card/80 transition-all"
                 >
                   <History className="h-3.5 w-3.5" />
                   <span>History ({company.history.length})</span>
@@ -170,7 +170,7 @@ const CompanyDashboard = () => {
             <NewsSection data={company.news} />
           </div>
 
-          <footer className="border-t border-border/50 pt-4 text-center text-xs text-muted-foreground">
+          <footer className="border-t border-border/30 pt-4 text-center text-xs text-muted-foreground">
             Data sourced from public filings and earnings reports. Not investment advice.
           </footer>
         </div>

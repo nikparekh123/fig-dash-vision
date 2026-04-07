@@ -5,8 +5,7 @@ import type { SummaryData } from "@/data/types";
 const SummarySection = ({ data }: { data: SummaryData }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {/* Lynch Pitch */}
-      <Card className="border-success/20 bg-success/5 backdrop-blur-sm">
+      <Card className="bg-success/5">
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-success" />
@@ -18,15 +17,14 @@ const SummarySection = ({ data }: { data: SummaryData }) => (
               <p key={i}>• <span className="font-semibold text-success">{b}</span></p>
             ))}
           </div>
-          <div className="border-t border-success/20 pt-3">
+          <div className="border-t border-success/15 pt-3">
             <p className="text-xs font-semibold text-foreground mb-1">What must go right:</p>
             <p className="text-xs text-muted-foreground">{data.lynchPitch.whatMustGoRight}</p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Munger Inversion */}
-      <Card className="border-danger/20 bg-danger/5 backdrop-blur-sm">
+      <Card className="bg-danger/5">
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-danger" />
@@ -40,7 +38,7 @@ const SummarySection = ({ data }: { data: SummaryData }) => (
             ))}
           </div>
           {data.mungerInvert.quote && (
-            <div className="border-t border-danger/20 pt-3">
+            <div className="border-t border-danger/15 pt-3">
               <p className="text-xs italic text-muted-foreground">{data.mungerInvert.quote}</p>
               {data.mungerInvert.quoteSource && (
                 <p className="text-[10px] font-semibold text-muted-foreground mt-1">— {data.mungerInvert.quoteSource}</p>
@@ -51,8 +49,7 @@ const SummarySection = ({ data }: { data: SummaryData }) => (
       </Card>
     </div>
 
-    {/* Verdict */}
-    <Card className="border-chart-amber/20 bg-card/80 backdrop-blur-sm">
+    <Card className="bg-card">
       <CardContent className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <Scale className="h-4 w-4 text-chart-amber" />

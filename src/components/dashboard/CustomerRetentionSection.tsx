@@ -9,7 +9,7 @@ import type { RetentionData } from "@/data/types";
 const ChartTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-border/50 bg-card px-3 py-2 text-xs shadow-xl">
+    <div className="rounded-xl border border-border bg-card px-3 py-2 text-xs">
       <p className="font-semibold text-foreground">{label}</p>
       {payload.map((p: any, i: number) => (
         <p key={i} className="text-muted-foreground">
@@ -23,7 +23,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
 const TierChart = ({ title, subtitle, data }: { title: string; subtitle: string; data: { year: string; value: number; type: string }[] }) => {
   if (!data.length) return null;
   return (
-    <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+    <Card className="bg-card">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-semibold text-foreground">{title}</CardTitle>
         <p className="text-xs text-muted-foreground">{subtitle}</p>
@@ -32,13 +32,13 @@ const TierChart = ({ title, subtitle, data }: { title: string; subtitle: string;
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 16, right: 8, left: 8, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" vertical={false} />
-              <XAxis dataKey="year" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} axisLine={{ stroke: "hsl(var(--muted))" }} tickLine={false} />
-              <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}K` : `${v}`} />
-              <Tooltip content={<ChartTooltip />} cursor={{ fill: "hsl(var(--muted) / 0.4)" }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(170 40% 16%)" vertical={false} />
+              <XAxis dataKey="year" tick={{ fill: "hsl(165 25% 38%)", fontSize: 11 }} axisLine={{ stroke: "hsl(170 40% 16%)" }} tickLine={false} />
+              <YAxis tick={{ fill: "hsl(165 25% 38%)", fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}K` : `${v}`} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: "hsl(170 40% 16% / 0.4)" }} />
               <Bar dataKey="value" name="Value" radius={[4, 4, 0, 0]} maxBarSize={40}>
-                {data.map((_, i) => (<Cell key={i} fill="hsl(var(--success))" fillOpacity={0.85} />))}
-                <LabelList dataKey="value" position="top" fill="hsl(var(--foreground))" fontSize={10} formatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(1)}K` : `${v}`} />
+                {data.map((_, i) => (<Cell key={i} fill="hsl(120 30% 73%)" fillOpacity={0.85} />))}
+                <LabelList dataKey="value" position="top" fill="hsl(30 50% 96%)" fontSize={10} formatter={(v: number) => v >= 1000 ? `${(v / 1000).toFixed(1)}K` : `${v}`} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -53,7 +53,7 @@ const PieTooltip = ({ active, payload }: any) => {
   const data = payload[0];
   const percent = typeof data?.percent === "number" ? (data.percent * 100).toFixed(1) : "N/A";
   return (
-    <div className="rounded-lg border border-border/50 bg-card px-3 py-2 text-xs shadow-xl">
+    <div className="rounded-xl border border-border bg-card px-3 py-2 text-xs">
       <p className="font-semibold text-foreground">{data.name}</p>
       <p className="text-muted-foreground">Value: <span className="font-mono text-foreground">{data.value.toLocaleString()}</span></p>
       <p className="text-muted-foreground">Share: <span className="font-mono text-foreground">{percent}%</span></p>
@@ -64,7 +64,7 @@ const PieTooltip = ({ active, payload }: any) => {
 const RegionalSection = ({ data }: { data: RetentionData["regional"] }) => {
   const total = data.reduce((sum, item) => sum + item.value, 0);
   return (
-    <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+    <Card className="bg-card">
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-chart-blue" />
@@ -102,7 +102,7 @@ const RegionalSection = ({ data }: { data: RetentionData["regional"] }) => {
 const CustomerRetentionSection = ({ data }: { data: RetentionData }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-      <Card className="border-success/20 bg-success/5 backdrop-blur-sm">
+      <Card className="bg-success/5">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-success" />
@@ -121,7 +121,7 @@ const CustomerRetentionSection = ({ data }: { data: RetentionData }) => (
     </div>
 
     {data.ndrNote && (
-      <div className="flex items-start gap-2 rounded-lg border border-chart-amber/20 bg-chart-amber/5 p-3">
+      <div className="flex items-start gap-2 rounded-xl bg-chart-amber/5 p-3">
         <AlertTriangle className="h-4 w-4 shrink-0 text-chart-amber mt-0.5" />
         <p className="text-xs text-muted-foreground">{data.ndrNote}</p>
       </div>
