@@ -11,7 +11,7 @@ const colorIconMap = {
 
 const StrategicInsights = ({ data }: { data: StrategicInsightsData }) => (
   <div className="space-y-4">
-    <Card className="border-chart-blue/20 bg-chart-blue/5 backdrop-blur-sm">
+    <Card className="bg-chart-blue/5">
       <CardContent className="p-5">
         <div className="flex gap-3">
           <Quote className="h-5 w-5 shrink-0 text-chart-blue mt-0.5" />
@@ -25,7 +25,7 @@ const StrategicInsights = ({ data }: { data: StrategicInsightsData }) => (
 
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
       {data.insights.map((i) => (
-        <Card key={i.title} className="border-border/50 bg-card/80 backdrop-blur-sm">
+        <Card key={i.title} className="bg-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-2">
               {colorIconMap[i.color]}

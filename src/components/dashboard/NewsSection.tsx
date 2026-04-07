@@ -9,9 +9,9 @@ const NewsSection = ({ data }: { data: NewsItem[] }) => (
     <div className="space-y-3 pr-4">
       {data.map((item) => (
         <a key={item.headline} href={item.url} target="_blank" rel="noopener noreferrer" className="block">
-          <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:border-border transition-colors cursor-pointer group">
+          <Card className="bg-card hover:bg-card/80 transition-colors cursor-pointer group">
             <CardContent className="flex items-start gap-3 p-4">
-              <div className="rounded-lg bg-accent p-2 shrink-0">
+              <div className="rounded-xl bg-accent p-2 shrink-0">
                 <Newspaper className="h-4 w-4 text-muted-foreground" />
               </div>
               <div className="space-y-1 flex-1">

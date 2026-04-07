@@ -8,9 +8,9 @@ import type { TechnicalData } from "@/data/types";
 const RADIAN = Math.PI / 180;
 
 const gaugeData = [
-  { name: "Oversold", value: 30, color: "hsl(0, 72%, 51%)" },
-  { name: "Neutral", value: 40, color: "hsl(45, 93%, 47%)" },
-  { name: "Overbought", value: 30, color: "hsl(142, 71%, 45%)" },
+  { name: "Oversold", value: 30, color: "hsl(8, 72%, 58%)" },
+  { name: "Neutral", value: 40, color: "hsl(42, 65%, 63%)" },
+  { name: "Overbought", value: 30, color: "hsl(120, 30%, 73%)" },
 ];
 
 const RsiNeedle = ({ cx, cy, outerRadius, value }: { cx: number; cy: number; outerRadius: number; value: number }) => {
@@ -22,10 +22,10 @@ const RsiNeedle = ({ cx, cy, outerRadius, value }: { cx: number; cy: number; out
   const labelY = cy + (outerRadius + 14) * Math.sin(-angle * RADIAN);
   return (
     <g>
-      <circle cx={cx} cy={cy} r={6} fill="white" stroke="white" strokeWidth={1} />
-      <line x1={cx} y1={cy} x2={x} y2={y} stroke="white" strokeWidth={3} strokeLinecap="round" />
-      <circle cx={x} cy={y} r={3} fill="white" />
-      <text x={labelX} y={labelY} textAnchor="middle" dominantBaseline="central" fill="white" fontSize={11} fontWeight={700}>{value}</text>
+      <circle cx={cx} cy={cy} r={6} fill="hsl(30 50% 96%)" stroke="hsl(30 50% 96%)" strokeWidth={1} />
+      <line x1={cx} y1={cy} x2={x} y2={y} stroke="hsl(30 50% 96%)" strokeWidth={3} strokeLinecap="round" />
+      <circle cx={x} cy={y} r={3} fill="hsl(30 50% 96%)" />
+      <text x={labelX} y={labelY} textAnchor="middle" dominantBaseline="central" fill="hsl(30 50% 96%)" fontSize={11} fontWeight={700}>{value}</text>
     </g>
   );
 };
@@ -37,8 +37,7 @@ const TechnicalAnalysisSection = ({ data }: { data: TechnicalData }) => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {/* EMA Card */}
-        <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+        <Card className="bg-card">
           <CardContent className="p-5">
             <p className="mb-4 text-xs font-medium uppercase tracking-wider text-muted-foreground">Exponential Moving Averages</p>
             <p className="mb-4 text-muted-foreground">Current Price: <span className="text-2xl font-bold text-foreground">${data.currentPrice.toFixed(2)}</span></p>
@@ -46,7 +45,7 @@ const TechnicalAnalysisSection = ({ data }: { data: TechnicalData }) => {
               {data.emas.map((ema) => {
                 const isAbove = data.currentPrice > ema.value;
                 return (
-                  <div key={ema.label} className="flex items-center justify-between rounded-lg border border-border/50 bg-background/50 px-4 py-3">
+                  <div key={ema.label} className="flex items-center justify-between rounded-xl bg-secondary/30 px-4 py-3">
                     <div className="space-y-0.5">
                       <p className="text-sm font-medium text-foreground">{ema.label}</p>
                       <div className="flex items-center gap-1.5">
@@ -62,29 +61,27 @@ const TechnicalAnalysisSection = ({ data }: { data: TechnicalData }) => {
           </CardContent>
         </Card>
 
-        {/* Chart Card */}
         {data.chartImage ? (
-          <Card className="group cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm transition-all hover:border-primary/30" onClick={() => setChartOpen(true)}>
+          <Card className="group cursor-pointer bg-card transition-all hover:bg-card/80" onClick={() => setChartOpen(true)}>
             <CardContent className="relative p-5">
               <div className="mb-2 flex items-center justify-between">
                 <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Price Chart</p>
                 <Maximize2 className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
               </div>
-              <div className="overflow-hidden rounded-lg border border-border/50">
+              <div className="overflow-hidden rounded-xl">
                 <img src={data.chartImage} alt="Price chart" className="w-full" />
               </div>
             </CardContent>
           </Card>
         ) : (
-          <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+          <Card className="bg-card">
             <CardContent className="p-5 flex items-center justify-center h-full">
               <p className="text-sm text-muted-foreground">Price chart not available</p>
             </CardContent>
           </Card>
         )}
 
-        {/* RSI Gauge */}
-        <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+        <Card className="bg-card">
           <CardContent className="p-5">
             <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Relative Strength Index (RSI)</p>
             <div className="flex flex-col items-center">
@@ -99,8 +96,8 @@ const TechnicalAnalysisSection = ({ data }: { data: TechnicalData }) => {
                 <p className="text-sm font-medium text-muted-foreground">{data.rsi < 30 ? "Oversold" : data.rsi > 70 ? "Overbought" : "Neutral"}</p>
               </div>
               <div className="mt-3 flex w-full justify-between px-4 text-xs text-muted-foreground">
-                <span className="text-[hsl(0,72%,51%)]">Oversold (&lt;30)</span>
-                <span className="text-[hsl(142,71%,45%)]">Overbought (&gt;70)</span>
+                <span className="text-danger">Oversold (&lt;30)</span>
+                <span className="text-success">Overbought (&gt;70)</span>
               </div>
             </div>
           </CardContent>
@@ -109,9 +106,9 @@ const TechnicalAnalysisSection = ({ data }: { data: TechnicalData }) => {
 
       {data.chartImage && (
         <Dialog open={chartOpen} onOpenChange={setChartOpen}>
-          <DialogContent className="max-w-5xl border-border/50 bg-card p-2">
+          <DialogContent className="max-w-5xl bg-card p-2">
             <DialogTitle className="sr-only">Price Chart</DialogTitle>
-            <img src={data.chartImage} alt="Price chart" className="w-full rounded-lg" />
+            <img src={data.chartImage} alt="Price chart" className="w-full rounded-xl" />
           </DialogContent>
         </Dialog>
       )}

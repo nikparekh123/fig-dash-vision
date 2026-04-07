@@ -6,8 +6,7 @@ import type { MarketPenetrationData } from "@/data/types";
 const MarketPenetration = ({ data }: { data: MarketPenetrationData }) => (
   <div className="space-y-4">
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-      {/* TAM Penetration */}
-      <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+      <Card className="bg-card">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             <Target className="h-4 w-4 text-chart-amber" />
@@ -24,8 +23,7 @@ const MarketPenetration = ({ data }: { data: MarketPenetrationData }) => (
         </CardContent>
       </Card>
 
-      {/* Enterprise Adoption */}
-      <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+      <Card className="bg-card">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             <Building2 className="h-4 w-4 text-success" />
@@ -48,8 +46,7 @@ const MarketPenetration = ({ data }: { data: MarketPenetrationData }) => (
         </CardContent>
       </Card>
 
-      {/* Upsell Runway */}
-      <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+      <Card className="bg-card">
         <CardHeader className="pb-2">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-chart-blue" />
@@ -58,7 +55,7 @@ const MarketPenetration = ({ data }: { data: MarketPenetrationData }) => (
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-xs text-muted-foreground">{data.upsell.description}</p>
-          <div className="rounded-lg border border-border/30 bg-secondary/30 p-3 space-y-1">
+          <div className="rounded-xl bg-secondary/30 p-3 space-y-1">
             {data.upsell.tiers.map((t) => (
               <p key={t.label} className="text-[11px] text-muted-foreground">
                 <span className="font-semibold text-foreground">{t.label}:</span> {t.detail}
@@ -69,8 +66,7 @@ const MarketPenetration = ({ data }: { data: MarketPenetrationData }) => (
       </Card>
     </div>
 
-    {/* User Funnel */}
-    <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
+    <Card className="bg-card">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-semibold text-foreground">User-to-Revenue Funnel</CardTitle>
       </CardHeader>
@@ -83,7 +79,7 @@ const MarketPenetration = ({ data }: { data: MarketPenetrationData }) => (
               </div>
               <div className="flex-1">
                 <div
-                  className={`${step.accent} h-8 rounded flex items-center px-3 transition-all`}
+                  className={`${step.accent} h-8 rounded-lg flex items-center px-3 transition-all`}
                   style={{ width: `${step.width}%`, opacity: 0.8 }}
                 >
                   <span className="text-[11px] font-medium text-foreground truncate">{step.label}</span>
