@@ -16,7 +16,7 @@ const KeyMetrics = ({ data }: { data: KeyMetricItem[] }) => (
     {data.map((m, i) => {
       const Icon = iconList[i % iconList.length];
       return (
-        <Card key={m.label} className="border-border/50 bg-card/80 backdrop-blur-sm">
+        <Card key={m.label} className="bg-card">
           <CardContent className="p-4">
             <div className="flex items-start gap-3">
               <div className={`rounded-lg p-2 ${accentMap[m.accent].bg}`}>

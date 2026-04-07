@@ -150,7 +150,7 @@ const Landing = () => {
         <div
           key={c.slug}
           onClick={() => navigate(`/company/${c.slug}`)}
-          className="group flex items-center gap-4 p-3 rounded-lg cursor-pointer border border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-md transition-all duration-200"
+          className="group flex items-center gap-4 p-3 rounded-xl cursor-pointer bg-card hover:bg-card/80 transition-all duration-150"
         >
           {c.logo ? (
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/90 p-1.5">
@@ -196,7 +196,7 @@ const Landing = () => {
       <Card
         key={c.slug}
         onClick={() => navigate(`/company/${c.slug}`)}
-        className="group cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200"
+        className="group cursor-pointer bg-card hover:bg-card/80 transition-all duration-150"
       >
         <CardContent className={`${sizeClasses[size]} flex flex-col items-center text-center space-y-2`}>
           <div className="w-full flex justify-end -mb-1">
@@ -465,7 +465,7 @@ const Landing = () => {
 
           {/* KPI Summary Cards */}
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <Card onClick={() => setOpenModal("positions")} className="cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/40 hover:shadow-md transition-all duration-200">
+            <Card onClick={() => setOpenModal("positions")} className="cursor-pointer bg-card hover:bg-card/80 transition-all duration-150">
               <CardContent className="p-4 flex items-center gap-3">
                 <div className="rounded-lg bg-primary/10 p-2"><BarChart3 className="h-4 w-4 text-primary" /></div>
                 <div>
@@ -474,7 +474,7 @@ const Landing = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card onClick={() => setOpenModal("watchlist")} className="cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-amber-400/30 hover:shadow-md transition-all duration-200">
+            <Card onClick={() => setOpenModal("watchlist")} className="cursor-pointer bg-card hover:bg-card/80 transition-all duration-150">
               <CardContent className="p-4 flex items-center gap-3">
                 <div className="rounded-lg bg-amber-400/10 p-2"><Clock className="h-4 w-4 text-amber-400" /></div>
                 <div>
@@ -483,7 +483,7 @@ const Landing = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card onClick={() => setOpenModal("invested")} className="cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-blue-400/30 hover:shadow-md transition-all duration-200">
+            <Card onClick={() => setOpenModal("invested")} className="cursor-pointer bg-card hover:bg-card/80 transition-all duration-150">
               <CardContent className="p-4 flex items-center gap-3">
                 <div className="rounded-lg bg-blue-400/10 p-2"><DollarSign className="h-4 w-4 text-blue-400" /></div>
                 <div>
@@ -492,7 +492,7 @@ const Landing = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card onClick={() => setOpenModal("pnl")} className="cursor-pointer border-border/50 bg-card/80 backdrop-blur-sm hover:border-emerald-400/30 hover:shadow-md transition-all duration-200">
+            <Card onClick={() => setOpenModal("pnl")} className="cursor-pointer bg-card hover:bg-card/80 transition-all duration-150">
               <CardContent className="p-4 flex items-center gap-3">
                 <div className={`rounded-lg p-2 ${isPnLPositive ? "bg-emerald-400/10" : "bg-red-400/10"}`}>
                   {isPnLPositive ? <TrendingUp className="h-4 w-4 text-emerald-400" /> : <TrendingDown className="h-4 w-4 text-red-400" />}
@@ -518,7 +518,7 @@ const Landing = () => {
                   placeholder="Search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-8 pr-7 h-9 text-sm bg-card/80 border-border/50"
+                  className="pl-8 pr-7 h-9 text-sm bg-card border-border/30"
                 />
                 {search && (
                   <button onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
@@ -529,7 +529,7 @@ const Landing = () => {
 
               {/* Industry Filter */}
               <Select value={industryFilter} onValueChange={setIndustryFilter}>
-                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="Industry" />
                 </SelectTrigger>
                 <SelectContent>
@@ -542,7 +542,7 @@ const Landing = () => {
 
               {/* Sector Filter */}
               <Select value={sectorFilter} onValueChange={setSectorFilter}>
-                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="Sector" />
                 </SelectTrigger>
                 <SelectContent>
@@ -555,7 +555,7 @@ const Landing = () => {
 
               {/* Earnings Filter */}
               <Select value={earningsFilter} onValueChange={setEarningsFilter}>
-                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[110px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="Earnings" />
                 </SelectTrigger>
                 <SelectContent>
@@ -568,7 +568,7 @@ const Landing = () => {
 
               {/* P&L Filter */}
               <Select value={pnlFilter} onValueChange={setPnlFilter}>
-                <SelectTrigger className="w-auto min-w-[100px] h-9 text-xs bg-card/80 border-border/50">
+                <SelectTrigger className="w-auto min-w-[100px] h-9 text-xs bg-card border-border/30">
                   <SelectValue placeholder="P&L" />
                 </SelectTrigger>
                 <SelectContent>
