@@ -11,13 +11,13 @@ export const netflixData: CompanyData = {
   industry: "Communication Services",
   sector: "Streaming",
   quarter: "Q4 2025",
-  earningsDate: "2026-03-09",
-  lastUpdated: "March 9, 2026",
+  earningsDate: "2026-01-20",
+  lastUpdated: "January 21, 2026",
   kpis: [
-    { title: "Q4 Revenue", value: "$12.05B", change: "+18% YoY", positive: true },
-    { title: "EPS", value: "$6.26", change: "Beat $5.87 est.", positive: true, subtitle: "+7%" },
-    { title: "Paid Members", value: "325M", change: "+16% YoY", positive: true },
-    { title: "FY2025 Revenue", value: "$45.2B", change: "+16% YoY", positive: true },
+    { title: "Q4 Revenue", value: "$12.05B", change: "+17.6% YoY", positive: true, subtitle: "Beat $12.0B est." },
+    { title: "Q4 GAAP EPS", value: "$0.56", change: "In line w/ est.", positive: true, subtitle: "Post 10-for-1 split" },
+    { title: "Paid Members", value: "325M", change: "+16% YoY", positive: true, subtitle: "New all-time high" },
+    { title: "FY2025 Revenue", value: "$45.18B", change: "+15.9% YoY", positive: true, subtitle: "FY EPS $2.53" },
   ],
   summary: {
     lynchPitch: {
